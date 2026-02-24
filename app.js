@@ -1,0 +1,3299 @@
+/* ─────────────────────────────────────────────
+   HELPERS
+───────────────────────────────────────────── */
+const sv = t => `<span class="kw">${t}</span>`;
+const sf = t => `<span class="fn">${t}</span>`;
+const ss = t => `<span class="str">${t}</span>`;
+const sn = t => `<span class="num">${t}</span>`;
+const sc = t => `<span class="cmt">${t}</span>`;
+const sb = () => `<span class="blank">___</span>`;
+
+/* ─────────────────────────────────────────────
+   CHAPTER 1 — 50 PROBLEMS
+───────────────────────────────────────────── */
+const ch1 = [
+    {
+        id: 1,
+        title: "Name & Greet",
+        topic: "variables",
+        difficulty: "easy",
+        desc: "Create a variable to store your name, then use it to build a greeting message.",
+        code: `${
+            sv('let')
+        } name = ${
+            sb()
+        };
+${
+            sv('let')
+        } greeting = ${'<span class="str">"Hello, "</span>'} + ${
+            sb()
+        } + ${'<span class="str">"!"</span>'};
+console.${
+            sf('log')
+        }(greeting);`,
+        guidance: ["Assign your <strong>name</strong> as a string using quotes: <code>\"Your Name\"</code>", "Use the <strong>+</strong> operator to join strings — this is called <strong>concatenation</strong>", "Refer to the variable by name (no quotes!) in the second line", "Expected output: <code>Hello, Alex!</code>"]
+    },
+
+    {
+        id: 2,
+        title: "const vs let",
+        topic: "declarations",
+        difficulty: "easy",
+        desc: "Declare a birthYear with const (it never changes) and an age with let. Then update the age by 1.",
+        code: `${
+            sv('const')
+        } birthYear = ${
+            sb()
+        };
+${
+            sv('let')
+        } age = ${
+            sb()
+        };
+
+age = age + ${
+            sn('1')
+        }; ${
+            sc('// birthday!')
+        }
+console.${
+            sf('log')
+        }(${'<span class="str">"Next year you\'ll be:"</span>'}, age);`,
+        guidance: ["Use <code>const</code> for values that <strong>never change</strong>", "Use <code>let</code> for values that <strong>can change</strong>", "Try reassigning <code>birthYear</code> — notice the TypeError? That's <code>const</code> protecting it!", "Fill in real numbers: e.g., <code>birthYear = 2001</code> and <code>age = 23</code>"]
+    },
+
+    {
+        id: 3,
+        title: "var Hoisting Trap",
+        topic: "declarations",
+        difficulty: "medium",
+        desc: "Predict what logs before fixing it. var is hoisted — understand why this is tricky vs let.",
+        code: `console.${
+            sf('log')
+        }(score); ${
+            sc('// What prints here?')
+        }
+${
+            sv('var')
+        } score = ${
+            sn('100')
+        };
+console.${
+            sf('log')
+        }(score); ${
+            sc('// And here?')
+        }
+
+${
+            sc('// Now try with let:')
+        }
+console.${
+            sf('log')
+        }(points); ${
+            sc('// What happens?')
+        }
+${
+            sv('let')
+        } points = ${
+            sn('50')
+        };`,
+        guidance: ["<code>var</code> is <strong>hoisted</strong> — declaration moves to top, but NOT the value", "First <code>console.log(score)</code> prints <code>undefined</code>, not 100", "<code>let</code> stays in a <strong>Temporal Dead Zone</strong> — accessing it early throws a <code>ReferenceError</code>", "Run the var version first, then try the let version"]
+    },
+
+    {
+        id: 4,
+        title: "Scope Detective",
+        topic: "scope",
+        difficulty: "medium",
+        desc: "Figure out which variables are accessible where. Fill in what each console.log prints.",
+        code: `${
+            sv('let')
+        } city = ${'<span class="str">"Paris"</span>'}; ${
+            sc('// global')
+        }
+
+${
+            sv('function')
+        } ${
+            sf('travel')
+        }() {
+  ${
+            sv('let')
+        } hotel = ${'<span class="str">"Grand"</span>'}; ${
+            sc('// local')
+        }
+  console.${
+            sf('log')
+        }(city);  ${
+            sc('// prints: ___')
+        }
+  console.${
+            sf('log')
+        }(hotel); ${
+            sc('// prints: ___')
+        }
+}
+
+${
+            sf('travel')
+        }();
+console.${
+            sf('log')
+        }(city);  ${
+            sc('// prints: ___')
+        }
+console.${
+            sf('log')
+        }(hotel); ${
+            sc('// prints: ___')
+        }`,
+        guidance: ["<strong>Global scope</strong>: accessible everywhere", "<strong>Local scope</strong>: only lives inside the function", "<code>city</code> is global → accessible inside and outside", "<code>hotel</code> is local → accessing outside causes <code>ReferenceError</code>"]
+    }, {
+        id: 5,
+        title: "Block Scope with let",
+        topic: "scope",
+        difficulty: "medium",
+        desc: "Explore how let and var behave differently inside an if block.",
+        code: `${
+            sv('if')
+        } (${
+            sv('true')
+        }) {
+  ${
+            sv('var')
+        } x = ${
+            sn('10')
+        };
+  ${
+            sv('let')
+        } y = ${
+            sn('20')
+        };
+}
+
+console.${
+            sf('log')
+        }(x); ${
+            sc('// prints: ___')
+        }
+console.${
+            sf('log')
+        }(y); ${
+            sc('// prints: ___')
+        }`,
+        guidance: ["<code>var</code> has <strong>function scope</strong> — leaks out of if blocks and loops", "<code>let</code> has <strong>block scope</strong> — stays inside <code>{ }</code>", "<code>x</code> prints 10, but <code>y</code> throws a <code>ReferenceError</code>", "This is why modern JS prefers <code>let</code> and <code>const</code> over <code>var</code>"]
+    }, {
+        id: 6,
+        title: "Type Check",
+        topic: "types",
+        difficulty: "easy",
+        desc: "Use typeof to inspect different values. Fill in what typeof will return for each.",
+        code: `console.${
+            sf('log')
+        }(${
+            sv('typeof')
+        } ${
+            sn('42')
+        });         ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${
+            sv('typeof')
+        } ${'<span class="str">"hello"</span>'});    ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${
+            sv('typeof')
+        } ${
+            sv('true')
+        });       ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${
+            sv('typeof')
+        } ${
+            sv('undefined')
+        }); ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${
+            sv('typeof')
+        } ${
+            sv('null')
+        });      ${
+            sc('// ⚠️ surprise!')
+        }
+console.${
+            sf('log')
+        }(${
+            sv('typeof')
+        } [${
+            sn('1')
+        },${
+            sn('2')
+        },${
+            sn('3')
+        }]);   ${
+            sc('// ⚠️ surprise!')
+        }`,
+        guidance: ["<code>typeof</code> returns a string like <code>\"number\"</code>, <code>\"string\"</code>, <code>\"boolean\"</code>", "<code>typeof null</code> returns <code>\"object\"</code> — a historic JS bug!", "<code>typeof []</code> also returns <code>\"object\"</code> — arrays are objects in JS", "To check for arrays use: <code>Array.isArray([])</code> → <code>true</code>"]
+    }, {
+        id: 7,
+        title: "String ↔ Number Conversion",
+        topic: "types",
+        difficulty: "easy",
+        desc: "Convert between strings and numbers. Spot the type coercion trap!",
+        code: `${
+            sv('let')
+        } strNum = ${'<span class="str">"42"</span>'};
+${
+            sv('let')
+        } realNum = ${
+            sf('Number')
+        }(strNum);
+console.${
+            sf('log')
+        }(realNum + ${
+            sn('8')
+        }); ${
+            sc('// should be 50')
+        }
+
+${
+            sv('let')
+        } n = ${
+            sn('100')
+        };
+${
+            sv('let')
+        } s = ${
+            sf('String')
+        }(n);
+console.${
+            sf('log')
+        }(s + ${'<span class="str">"px"</span>'}); ${
+            sc('// "100px"')
+        }
+
+${
+            sc('// 🚨 Coercion trap:')
+        }
+console.${
+            sf('log')
+        }(${'<span class="str">"5"</span>'} + ${
+            sn('3')
+        }); ${
+            sc('// "53" or 8?')
+        }
+console.${
+            sf('log')
+        }(${'<span class="str">"5"</span>'} - ${
+            sn('3')
+        }); ${
+            sc('// "53" or 2?')
+        }`,
+        guidance: ["<code>Number(\"42\")</code> converts string → number", "<code>String(100)</code> or <code>100 + \"\"</code> converts number → string", "<strong>Trap</strong>: <code>+</code> with a string triggers concatenation → <code>\"5\" + 3 = \"53\"</code>", "But <code>-</code> forces numeric conversion → <code>\"5\" - 3 = 2</code>"]
+    }, {
+        id: 8,
+        title: "Arithmetic Operators",
+        topic: "operators",
+        difficulty: "easy",
+        desc: "Use +, -, *, /, % to calculate a receipt. Fill in the blanks.",
+        code: `${
+            sv('let')
+        } price    = ${
+            sn('80')
+        };
+${
+            sv('let')
+        } discount = ${
+            sn('15')
+        };
+${
+            sv('let')
+        } tax      = ${
+            sn('0.1')
+        };
+
+${
+            sv('let')
+        } afterDiscount = price ${
+            sb()
+        } discount;
+${
+            sv('let')
+        } taxAmount     = afterDiscount ${
+            sb()
+        } tax;
+${
+            sv('let')
+        } total         = afterDiscount ${
+            sb()
+        } taxAmount;
+${
+            sv('let')
+        } remainder     = total ${
+            sb()
+        } ${
+            sn('3')
+        };
+
+console.${
+            sf('log')
+        }(${'<span class="str">"Total:"</span>'}, total);
+console.${
+            sf('log')
+        }(${'<span class="str">"Remainder:"</span>'}, remainder);`,
+        guidance: ["Use <code>-</code> to subtract the discount", "Use <code>*</code> to multiply for the tax amount", "Use <code>+</code> to add tax to the subtotal", "Use <code>%</code> (modulo) to get the remainder when splitting by 3"]
+    }, {
+        id: 9,
+        title: "Comparison Operators",
+        topic: "operators",
+        difficulty: "medium",
+        desc: "Use == vs === — predict each result before running.",
+        code: `console.${
+            sf('log')
+        }(${
+            sn('5')
+        } == ${'<span class="str">"5"</span>'});   ${
+            sc('// ___ (loose)')
+        }
+console.${
+            sf('log')
+        }(${
+            sn('5')
+        } === ${'<span class="str">"5"</span>'}); ${
+            sc('// ___ (strict)')
+        }
+console.${
+            sf('log')
+        }(${
+            sn('5')
+        } === ${
+            sn('5')
+        });  ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${
+            sn('0')
+        } == ${
+            sv('false')
+        }); ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${
+            sn('0')
+        } === ${
+            sv('false')
+        });${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(${'<span class="str">""</span>'} == ${
+            sv('false')
+        }); ${
+            sc('// ___')
+        }`,
+        guidance: [
+            "<code>==</code> is <strong>loose equality</strong> — converts types before comparing",
+            "<code>===</code> is <strong>strict equality</strong> — value AND type must match",
+            "<code>5 == \"5\"</code> is <code>true</code> (string converted to number)",
+            "<code>5 === \"5\"</code> is <code>false</code> (number ≠ string type)",
+            "<strong>Best practice</strong>: always use <code>===</code>!"
+        ]
+    }, {
+        id: 10,
+        title: "Logical Operators",
+        topic: "operators",
+        difficulty: "medium",
+        desc: "Fill in &&, ||, ! to make each statement work correctly.",
+        code: `${
+            sv('let')
+        } isLoggedIn = ${
+            sv('true')
+        };
+${
+            sv('let')
+        } isAdmin    = ${
+            sv('false')
+        };
+
+${
+            sc('// logged in AND admin?')
+        }
+console.${
+            sf('log')
+        }(isLoggedIn ${
+            sb()
+        } isAdmin);
+
+${
+            sc('// logged in OR admin?')
+        }
+console.${
+            sf('log')
+        }(isLoggedIn ${
+            sb()
+        } isAdmin);
+
+${
+            sc('// NOT an admin?')
+        }
+console.${
+            sf('log')
+        }(${
+            sb()
+        }isAdmin);
+
+${
+            sv('let')
+        } name = ${
+            sv('null')
+        };
+console.${
+            sf('log')
+        }(name || ${'<span class="str">"Guest"</span>'}); ${
+            sc('// ___')
+        }`,
+        guidance: ["<code>&&</code> (AND) — both sides must be truthy", "<code>||</code> (OR) — at least one side must be truthy", "<code>!</code> (NOT) — flips the boolean", "<strong>Short-circuit</strong>: <code>null || \"Guest\"</code> → <code>\"Guest\"</code> because null is falsy"]
+    }, {
+        id: 11,
+        title: "String Methods",
+        topic: "functions",
+        difficulty: "easy",
+        desc: "Use built-in string methods to transform and inspect a sentence.",
+        code: `${
+            sv('let')
+        } s = ${'<span class="str">"  JavaScript is Awesome!  "</span>'};
+
+console.${
+            sf('log')
+        }(s.${
+            sf('trim')
+        }());
+console.${
+            sf('log')
+        }(s.${
+            sf('toLowerCase')
+        }());
+console.${
+            sf('log')
+        }(s.${
+            sf('toUpperCase')
+        }());
+console.${
+            sf('log')
+        }(s.${
+            sf('includes')
+        }(${'<span class="str">"Awesome"</span>'}));
+console.${
+            sf('log')
+        }(s.${
+            sf('replace')
+        }(${'<span class="str">"Awesome"</span>'}, ${'<span class="str">"Cool"</span>'}));
+console.${
+            sf('log')
+        }(s.${
+            sf('length')
+        }); ${
+            sc('// property, not method!')
+        }`,
+        guidance: [
+            "<code>.trim()</code> removes whitespace from both ends",
+            "<code>.toLowerCase()</code> / <code>.toUpperCase()</code> change the case",
+            "<code>.includes()</code> returns <code>true</code> or <code>false</code>",
+            "<code>.replace(old, new)</code> swaps the first occurrence",
+            "<code>.length</code> is a <strong>property</strong> — no parentheses!"
+        ]
+    }, {
+        id: 12,
+        title: "Number Methods & Math",
+        topic: "functions",
+        difficulty: "easy",
+        desc: "Use the Math object and Number methods to work with numeric values.",
+        code: `${
+            sv('let')
+        } price = ${
+            sn('19.956')
+        };
+
+console.${
+            sf('log')
+        }(price.${
+            sf('toFixed')
+        }(${
+            sn('2')
+        }));
+console.${
+            sf('log')
+        }(Math.${
+            sf('round')
+        }(${
+            sn('4.6')
+        }));
+console.${
+            sf('log')
+        }(Math.${
+            sf('floor')
+        }(${
+            sn('4.9')
+        }));
+console.${
+            sf('log')
+        }(Math.${
+            sf('ceil')
+        }(${
+            sn('4.1')
+        }));
+console.${
+            sf('log')
+        }(Math.${
+            sf('max')
+        }(${
+            sn('3')
+        }, ${
+            sn('9')
+        }, ${
+            sn('1')
+        }, ${
+            sn('7')
+        }));
+console.${
+            sf('log')
+        }(Math.${
+            sf('min')
+        }(${
+            sn('3')
+        }, ${
+            sn('9')
+        }, ${
+            sn('1')
+        }, ${
+            sn('7')
+        }));
+console.${
+            sf('log')
+        }(Math.${
+            sf('random')
+        }());`,
+        guidance: ["<code>.toFixed(2)</code> returns a <strong>string</strong> with 2 decimal places", "<code>Math.round()</code> rounds to nearest integer", "<code>Math.floor()</code> always rounds <strong>down</strong>, <code>Math.ceil()</code> always rounds <strong>up</strong>", "<code>Math.random()</code> gives 0–1; for 1-10: <code>Math.floor(Math.random()*10)+1</code>"]
+    }, {
+        id: 13,
+        title: "Array Methods",
+        topic: "functions",
+        difficulty: "medium",
+        desc: "Use built-in array methods to add, remove, find, and transform items.",
+        code: `${
+            sv('let')
+        } fruits = [${'<span class="str">"apple"</span>'}, ${'<span class="str">"banana"</span>'}, ${'<span class="str">"mango"</span>'}];
+
+fruits.${
+            sf('push')
+        }(${'<span class="str">"grape"</span>'}); ${
+            sc('// add to end')
+        }
+fruits.${
+            sf('pop')
+        }();               ${
+            sc('// remove from end')
+        }
+fruits.${
+            sf('unshift')
+        }(${'<span class="str">"kiwi"</span>'}); ${
+            sc('// add to start')
+        }
+
+console.${
+            sf('log')
+        }(fruits.${
+            sf('indexOf')
+        }(${'<span class="str">"banana"</span>'}));
+console.${
+            sf('log')
+        }(fruits.${
+            sf('includes')
+        }(${'<span class="str">"mango"</span>'}));
+console.${
+            sf('log')
+        }(fruits.${
+            sf('join')
+        }(${'<span class="str">" | "</span>'}));`,
+        guidance: ["<code>.push()</code> adds to end; <code>.pop()</code> removes from end", "<code>.unshift()</code> adds to start; <code>.shift()</code> removes from start", "<code>.indexOf()</code> returns the position, or <code>-1</code> if not found", "<code>.join(sep)</code> converts array to string with separator between items"]
+    }, {
+        id: 14,
+        title: "Ternary Operator",
+        topic: "operators",
+        difficulty: "medium",
+        desc: "Rewrite an if/else as a ternary. Then write one from scratch.",
+        code: `${
+            sv('let')
+        } age = ${
+            sn('20')
+        };
+
+${
+            sc('// if/else version:')
+        }
+${
+            sv('if')
+        } (age >= ${
+            sn('18')
+        }) {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Adult"</span>'});
+} ${
+            sv('else')
+        } {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Minor"</span>'});
+}
+
+${
+            sc('// Rewrite as ternary:')
+        }
+${
+            sv('let')
+        } status = age >= ${
+            sn('18')
+        } ? ${
+            sb()
+        } : ${
+            sb()
+        };
+console.${
+            sf('log')
+        }(status);
+
+${
+            sv('let')
+        } score = ${
+            sn('72')
+        };
+${
+            sv('let')
+        } result = ${
+            sb()
+        }; ${
+            sc('// Pass or Fail')
+        }`,
+        guidance: ["Ternary syntax: <code>condition ? valueIfTrue : valueIfFalse</code>", "Fill in <code>\"Adult\"</code> and <code>\"Minor\"</code> in the blanks", "For score: <code>score >= 50 ? \"Pass\" : \"Fail\"</code>", "Ternaries are great for simple one-liner assignments"]
+    }, {
+        id: 15,
+        title: "Putting It All Together",
+        topic: "variables",
+        difficulty: "hard",
+        desc: "Build a mini profile card using all Ch.1 concepts.",
+        code: `${
+            sv('const')
+        } firstName = ${'<span class="str">"Sam"</span>'};
+${
+            sv('const')
+        } lastName  = ${'<span class="str">"Rivera"</span>'};
+${
+            sv('let')
+        }   age       = ${
+            sn('28')
+        };
+${
+            sv('let')
+        }   score     = ${
+            sn('87.456')
+        };
+
+${
+            sv('let')
+        } fullName = firstName + ${
+            sb()
+        } + lastName;
+${
+            sv('let')
+        } initials = firstName[${
+            sn('0')
+        }] + ${
+            sb()
+        };
+${
+            sv('let')
+        } category = age >= ${
+            sn('18')
+        } ? ${
+            sb()
+        } : ${
+            sb()
+        };
+${
+            sv('let')
+        } display  = score.${
+            sf('toFixed')
+        }(${
+            sb()
+        });
+
+console.${
+            sf('log')
+        }(${'<span class="str">"Name:"</span>'}, fullName.${
+            sf('toUpperCase')
+        }());
+console.${
+            sf('log')
+        }(${'<span class="str">"Initials:"</span>'}, initials);
+console.${
+            sf('log')
+        }(${'<span class="str">"Category:"</span>'}, category);
+console.${
+            sf('log')
+        }(${'<span class="str">"Score:"</span>'}, display);`,
+        guidance: [
+            "Step 1: join firstName + <code>\" \"</code> + lastName",
+            "Step 2: <code>lastName[0]</code> gives the first letter",
+            "Step 3: ternary → <code>age >= 18 ? \"Adult\" : \"Minor\"</code>",
+            "Step 4: <code>.toFixed(1)</code> → <code>87.5</code>",
+            "Bonus: wrap it all in a <code>function createProfile()</code>!"
+        ]
+    }, {
+        id: 16,
+        title: "Template Literals",
+        topic: "variables",
+        difficulty: "easy",
+        desc: "Rewrite concatenation using backtick template literals.",
+        code: `${
+            sv('let')
+        } product = ${'<span class="str">"Laptop"</span>'};
+${
+            sv('let')
+        } price   = ${
+            sn('999')
+        };
+${
+            sv('let')
+        } qty     = ${
+            sn('3')
+        };
+
+${
+            sc('// Old (concatenation):')
+        }
+${
+            sv('let')
+        } msg1 = ${'<span class="str">"Item: "</span>'} + product + ${'<span class="str">", Price: $"</span>'} + price;
+
+${
+            sc('// New (template literal):')
+        }
+${
+            sv('let')
+        } msg2 = ${
+            sb()
+        };
+
+${
+            sc('// With expression:')
+        }
+${
+            sv('let')
+        } receipt = ${
+            sb()
+        }; ${
+            sc('// show qty * price')
+        }
+console.${
+            sf('log')
+        }(msg2, receipt);`,
+        guidance: ["Use <strong>backticks</strong> ` ` instead of quotes", "Embed variables with <code>${ }</code>: <code>\\`Item: ${product}\\`</code>", "For receipt: <code>\\`Total: $${qty * price}\\`</code> — math works inside <code>${ }</code>!", "Template literals also support multi-line strings"]
+    }, {
+        id: 17,
+        title: "Swap Two Variables",
+        topic: "variables",
+        difficulty: "medium",
+        desc: "Swap two variables. Try the temp variable way, then the ES6 destructuring way.",
+        code: `${
+            sv('let')
+        } a = ${'<span class="str">"first"</span>'};
+${
+            sv('let')
+        } b = ${'<span class="str">"second"</span>'};
+
+${
+            sc('// Method 1: temp variable')
+        }
+${
+            sv('let')
+        } temp = ${
+            sb()
+        };
+a = ${
+            sb()
+        }; b = ${
+            sb()
+        };
+console.${
+            sf('log')
+        }(a, b); ${
+            sc('// "second" "first"')
+        }
+
+${
+            sc('// Method 2: destructuring')
+        }
+a = ${'<span class="str">"first"</span>'}; b = ${'<span class="str">"second"</span>'};
+[${
+            sb()
+        }, ${
+            sb()
+        }] = [b, a];
+console.${
+            sf('log')
+        }(a, b); ${
+            sc('// "second" "first"')
+        }`,
+        guidance: ["Method 1: temp = a, then a = b, then b = temp", "Without temp, you'd lose a's original value before copying it", "Method 2: <code>[a, b] = [b, a]</code> — right side evaluates first, then assigns", "This one-liner is a modern ES6 destructuring swap"]
+    }, {
+        id: 18,
+        title: "Counter with Shorthand",
+        topic: "variables",
+        difficulty: "easy",
+        desc: "Use shorthand assignment operators +=, *=, -=, ++, -- on a counter.",
+        code: `${
+            sv('let')
+        } counter = ${
+            sn('0')
+        };
+
+counter ${
+            sb()
+        }= ${
+            sn('5')
+        };  ${
+            sc('// now 5')
+        }
+counter ${
+            sb()
+        }= ${
+            sn('2')
+        };  ${
+            sc('// now 10')
+        }
+counter ${
+            sb()
+        }= ${
+            sn('3')
+        };  ${
+            sc('// now 7')
+        }
+counter${
+            sb()
+        };       ${
+            sc('// now 8 (increment)')
+        }
+counter${
+            sb()
+        };       ${
+            sc('// now 7 (decrement)')
+        }
+
+console.${
+            sf('log')
+        }(${'<span class="str">"Final:"</span>'}, counter);`,
+        guidance: ["<code>+=</code> adds: <code>0 += 5</code> → 5", "<code>*=</code> multiplies: <code>5 *= 2</code> → 10", "<code>-=</code> subtracts: <code>10 -= 3</code> → 7", "<code>++</code> increments by 1; <code>--</code> decrements by 1"]
+    }, {
+        id: 19,
+        title: "const with Objects",
+        topic: "declarations",
+        difficulty: "medium",
+        desc: "Discover that const doesn't freeze objects — only the binding.",
+        code: `${
+            sv('const')
+        } user = { name: ${'<span class="str">"Alice"</span>'}, age: ${
+            sn('25')
+        } };
+
+user.age = ${
+            sn('26')
+        };
+console.${
+            sf('log')
+        }(user.age);  ${
+            sc('// works or error?')
+        }
+
+user.city = ${'<span class="str">"Paris"</span>'};
+console.${
+            sf('log')
+        }(user.city); ${
+            sc('// works or error?')
+        }
+
+user = { name: ${'<span class="str">"Bob"</span>'} }; ${
+            sc('// works or error?')
+        }`,
+        guidance: [
+            "<code>const</code> prevents <strong>reassignment</strong> — not mutation",
+            "Changing <code>user.age</code> is mutation — works fine!",
+            "Adding <code>user.city</code> also works — the object is mutable",
+            "Only <code>user = {...}</code> throws a TypeError — that's a reassignment",
+            "To fully freeze: <code>Object.freeze(user)</code>"
+        ]
+    }, {
+        id: 20,
+        title: "Redeclaration: var vs let",
+        topic: "declarations",
+        difficulty: "medium",
+        desc: "In the same scope, var allows redeclaring the same variable; let does not. Choose the correct keyword.",
+        code: `${
+            sc('// Same scope — which keyword allows this?')
+        }
+${
+            sv('var')
+        } config = ${'<span class="str">"dev"</span>'};
+${
+            sv('var')
+        } config = ${'<span class="str">"prod"</span>'}; ${
+            sc('// no error with var')
+        }
+
+${
+            sv('let')
+        } mode = ${'<span class="str">"read"</span>'};
+${
+            sb()
+        } mode = ${'<span class="str">"write"</span>'}; ${
+            sc('// SyntaxError! Use a different approach.')
+        }
+
+console.${
+            sf('log')
+        }(config, mode);`,
+        guidance: ["<code>var</code> allows <strong>redeclaration</strong> in the same scope — the second declaration is just ignored", "<code>let</code> and <code>const</code> do <strong>not</strong> allow redeclaring the same name in the same scope", "To \"change\" a <code>let</code> variable, just <strong>reassign</strong>: <code>mode = \"write\"</code> (no second <code>let</code>)", "Remove the second <code>let</code> and write <code>mode = \"write\"</code> so the variable is updated, not redeclared"]
+    }, {
+        id: 21,
+        title: "Choose the Right Keyword",
+        topic: "declarations",
+        difficulty: "hard",
+        desc: "For each scenario choose var, let, or const — and explain why.",
+        code: `${
+            sb()
+        } PI = ${
+            sn('3.14159')
+        };       ${
+            sc('// math constant')
+        }
+${
+            sb()
+        } lives = ${
+            sn('3')
+        };           ${
+            sc('// game lives (changes)')
+        }
+${
+            sb()
+        } MAX = ${
+            sn('100')
+        };           ${
+            sc('// config, fixed')
+        }
+${
+            sb()
+        } result;              ${
+            sc('// set later')
+        }
+
+${
+            sv('function')
+        } ${
+            sf('getScore')
+        }() {
+  ${
+            sb()
+        } base = ${
+            sn('10')
+        };
+  ${
+            sv('return')
+        } base * ${
+            sn('2')
+        };
+}`,
+        guidance: [
+            "<code>const</code> → PI and MAX: values that never change",
+            "<code>let</code> → lives: changes over time",
+            "<code>let</code> → result: declared now without a value; const requires initialization",
+            "<code>let</code> → base: local function variable",
+            "<strong>Rule of thumb</strong>: default to const, use let only when you must reassign"
+        ]
+    }, {
+        id: 22,
+        title: "Block scope visibility",
+        topic: "scope",
+        difficulty: "medium",
+        desc: "Variables declared with let inside a block { } are only visible inside that block. Predict what each log can see.",
+        code: `${
+            sv('let')
+        } a = ${'<span class="str">"global"</span>'};
+
+${
+            sv('if')
+        } (${
+            sv('true')
+        }) {
+  ${
+            sv('let')
+        } b = ${'<span class="str">"block"</span>'};
+  console.${
+            sf('log')
+        }(a); ${
+            sc('// ___')
+        }
+  console.${
+            sf('log')
+        }(b); ${
+            sc('// ___')
+        }
+}
+
+console.${
+            sf('log')
+        }(a); ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(b); ${
+            sc('// ___ (error or value?)')
+        }`,
+        guidance: ["<strong>Block scope</strong>: <code>let</code> and <code>const</code> inside <code>{ }</code> exist only inside that block", "Inside the block: <code>a</code> is visible (global), <code>b</code> is visible → logs <code>\"global\"</code>, <code>\"block\"</code>", "Outside the block: <code>a</code> still visible → <code>\"global\"</code>", "Outside the block: <code>b</code> is not defined → <code>ReferenceError</code>"]
+    }, {
+        id: 23,
+        title: "Shadowing Variables",
+        topic: "scope",
+        difficulty: "medium",
+        desc: "A local variable can shadow (hide) an outer variable with the same name.",
+        code: `${
+            sv('let')
+        } color = ${'<span class="str">"red"</span>'};
+
+${
+            sv('function')
+        } ${
+            sf('paint')
+        }() {
+  ${
+            sv('let')
+        } color = ${'<span class="str">"blue"</span>'}; ${
+            sc('// shadows!')
+        }
+  console.${
+            sf('log')
+        }(color); ${
+            sc('// ___')
+        }
+}
+
+${
+            sf('paint')
+        }();
+console.${
+            sf('log')
+        }(color); ${
+            sc('// ___')
+        }
+
+${
+            sv('function')
+        } ${
+            sf('noShadow')
+        }() {
+  console.${
+            sf('log')
+        }(color); ${
+            sc('// ___')
+        }
+}
+${
+            sf('noShadow')
+        }();`,
+        guidance: ["Inside paint(), local <code>color = \"blue\"</code> shadows the outer <code>\"red\"</code>", "JS looks up variables <strong>innermost scope first</strong>", "paint() logs <code>\"blue\"</code>; outside, global color is unchanged → <code>\"red\"</code>", "noShadow() finds no local color → walks up to global → <code>\"red\"</code>"]
+    }, {
+        id: 25,
+        title: "Nullish Coalescing ??",
+        topic: "operators",
+        difficulty: "medium",
+        desc: "Learn ?? — only triggers for null/undefined, not all falsy values like ||.",
+        code: `${
+            sv('let')
+        } score    = ${
+            sn('0')
+        };
+${
+            sv('let')
+        } username = ${'<span class="str">""</span>'};
+${
+            sv('let')
+        } nickname = ${
+            sv('null')
+        };
+
+${
+            sc('// With || (bug: 0 and "" are falsy!):')
+        }
+console.${
+            sf('log')
+        }(score    || ${
+            sn('100')
+        });  ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(username || ${'<span class="str">"Anon"</span>'}); ${
+            sc('// ___')
+        }
+
+${
+            sc('// With ?? (only null/undefined):')
+        }
+console.${
+            sf('log')
+        }(score    ?? ${
+            sn('100')
+        });  ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(username ?? ${'<span class="str">"Anon"</span>'}); ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(nickname ?? ${'<span class="str">"Anon"</span>'}); ${
+            sc('// ___')
+        }`,
+        guidance: [
+            "<code>||</code> triggers for all falsy values: <code>0, \"\", false, null, undefined, NaN</code>",
+            "So <code>0 || 100</code> gives 100 — treating 0 as 'no value', which is often a bug!",
+            "<code>??</code> only triggers for <code>null</code> or <code>undefined</code>",
+            "<code>0 ?? 100</code> gives <code>0</code> — the actual value is kept",
+            "Use <code>??</code> when 0, false, or \"\" are valid real values in your data"
+        ]
+    }, {
+        id: 26,
+        title: "Optional Chaining ?.",
+        topic: "operators",
+        difficulty: "medium",
+        desc: "Access deeply nested properties safely without crashing when something is null.",
+        code: `${
+            sv('const')
+        } u1 = { name: ${'<span class="str">"Alice"</span>'}, address: { city: ${'<span class="str">"Paris"</span>'} } };
+${
+            sv('const')
+        } u2 = { name: ${'<span class="str">"Bob"</span>'} };
+
+console.${
+            sf('log')
+        }(u1${
+            sb()
+        }address${
+            sb()
+        }city); ${
+            sc('// "Paris"')
+        }
+console.${
+            sf('log')
+        }(u2${
+            sb()
+        }address${
+            sb()
+        }city); ${
+            sc('// ___')
+        }
+
+${
+            sv('let')
+        } city = u2${
+            sb()
+        }address${
+            sb()
+        }city ?? ${'<span class="str">"Unknown"</span>'};
+console.${
+            sf('log')
+        }(city);`,
+        guidance: ["Use <code>?.</code> between each property: <code>u1?.address?.city</code>", "If any part is null/undefined, the chain short-circuits to <code>undefined</code> (no crash!)", "Without <code>?.</code>, accessing <code>.city</code> on <code>undefined</code> throws a TypeError", "Combine with <code>??</code>: <code>u2?.address?.city ?? \"Unknown\"</code>"]
+    }, {
+        id: 27,
+        title: "Prefix vs Postfix ++",
+        topic: "operators",
+        difficulty: "hard",
+        desc: "Understand the difference between ++i (prefix) and i++ (postfix).",
+        code: `${
+            sv('let')
+        } a = ${
+            sn('5')
+        };
+${
+            sv('let')
+        } b = ${
+            sn('5')
+        };
+
+${
+            sc('// Postfix: return THEN increment')
+        }
+console.${
+            sf('log')
+        }(a++); ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(a);   ${
+            sc('// ___')
+        }
+
+${
+            sc('// Prefix: increment THEN return')
+        }
+console.${
+            sf('log')
+        }(++b); ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(b);   ${
+            sc('// ___')
+        }
+
+${
+            sv('let')
+        } i = ${
+            sn('3')
+        };
+${
+            sv('let')
+        } x = i++ + ++i;
+console.${
+            sf('log')
+        }(x); ${
+            sc('// ___')
+        }`,
+        guidance: [
+            "<strong>Postfix</strong> a++: returns 5 first, then a becomes 6",
+            "<strong>Prefix</strong> ++b: b becomes 6 first, then returns 6",
+            "Tricky: <code>i++</code> returns 3 (i→4), then <code>++i</code> increments to 5 and returns 5",
+            "So x = 3 + 5 = 8",
+            "Avoid mixing prefix and postfix in the same expression — hard to read!"
+        ]
+    }, {
+        id: 28,
+        title: "Truthy & Falsy Values",
+        topic: "types",
+        difficulty: "medium",
+        desc: "Every JS value is truthy or falsy in a boolean context. Classify each one.",
+        code: `${
+            sv('if')
+        } (${
+            sn('0')
+        })        console.${
+            sf('log')
+        }(${'<span class="str">"0 truthy"</span>'}); ${
+            sc('// ___')
+        }
+${
+            sv('if')
+        } (${'<span class="str">""</span>'})       console.${
+            sf('log')
+        }(${'<span class="str">"empty str truthy"</span>'}); ${
+            sc('// ___')
+        }
+${
+            sv('if')
+        } (${'<span class="str">"0"</span>'})      console.${
+            sf('log')
+        }(${'<span class="str">"\\\"0\\\" truthy"</span>'}); ${
+            sc('// ___')
+        }
+${
+            sv('if')
+        } ([])       console.${
+            sf('log')
+        }(${'<span class="str">"[] truthy"</span>'}); ${
+            sc('// ___')
+        }
+${
+            sv('if')
+        } (${
+            sv('null')
+        })     console.${
+            sf('log')
+        }(${'<span class="str">"null truthy"</span>'}); ${
+            sc('// ___')
+        }
+${
+            sv('if')
+        } (${
+            sv('NaN')
+        })      console.${
+            sf('log')
+        }(${'<span class="str">"NaN truthy"</span>'}); ${
+            sc('// ___')
+        }
+${
+            sv('if')
+        } ({})       console.${
+            sf('log')
+        }(${'<span class="str">"{} truthy"</span>'}); ${
+            sc('// ___')
+        }`,
+        guidance: ["The <strong>6 falsy values</strong>: <code>false, 0, \"\", null, undefined, NaN</code>", "Everything else is truthy — including <code>[]</code>, <code>{}</code>, <code>\"0\"</code>, <code>-1</code>", "<code>[]</code> is truthy (empty array is still an object!)", "Test any value: <code>Boolean(val)</code> or <code>!!val</code>"]
+    }, {
+        id: 29,
+        title: "NaN and Infinity",
+        topic: "types",
+        difficulty: "medium",
+        desc: "Explore two special number values — they behave surprisingly!",
+        code: `${
+            sv('let')
+        } r1 = ${
+            sn('10')
+        } / ${
+            sn('0')
+        };
+${
+            sv('let')
+        } r2 = -${
+            sn('10')
+        } / ${
+            sn('0')
+        };
+${
+            sv('let')
+        } r3 = ${
+            sn('0')
+        } / ${
+            sn('0')
+        };
+${
+            sv('let')
+        } r4 = ${
+            sf('parseInt')
+        }(${'<span class="str">"hello"</span>'});
+
+console.${
+            sf('log')
+        }(r1);          ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(r2);          ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(r3);          ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(r4);          ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(r4 === ${
+            sv('NaN')
+        }); ${
+            sc('// ___  ⚠️')
+        }
+console.${
+            sf('log')
+        }(${
+            sf('isNaN')
+        }(r4));  ${
+            sc('// ___')
+        }`,
+        guidance: [
+            "<code>10/0</code> = Infinity, <code>-10/0</code> = -Infinity (no error in JS!)",
+            "<code>0/0</code> = NaN — undefined mathematically",
+            "<code>parseInt(\"hello\")</code> = NaN — can't parse",
+            "<strong>NaN !== NaN</strong> — it's the only value not equal to itself!",
+            "Always use <code>isNaN()</code> to check for NaN"
+        ]
+    }, {
+        id: 30,
+        title: "Objects & Destructuring",
+        topic: "types",
+        difficulty: "hard",
+        desc: "Extract values from an object using destructuring — cleaner than dot notation.",
+        code: `${
+            sv('const')
+        } movie = {
+  title: ${'<span class="str">"Inception"</span>'}, year: ${
+            sn('2010')
+        },
+  director: ${'<span class="str">"Nolan"</span>'}, rating: ${
+            sn('8.8')
+        }
+};
+
+${
+            sv('const')
+        } { ${
+            sb()
+        }, ${
+            sb()
+        } } = movie;     ${
+            sc('// get title & rating')
+        }
+${
+            sv('const')
+        } { director: ${
+            sb()
+        } } = movie; ${
+            sc('// rename to "dir"')
+        }
+${
+            sv('const')
+        } { genre = ${
+            sb()
+        } } = movie;  ${
+            sc('// default "Unknown"')
+        }
+console.${
+            sf('log')
+        }(title, rating, dir, genre);`,
+        guidance: ["Syntax: <code>const { title, rating } = movie</code> — names must match keys", "Rename: <code>const { director: dir } = movie</code>", "Default: <code>const { genre = \"Unknown\" } = movie</code>", "Works with arrays too: <code>const [a, b] = [10, 20]</code>"]
+    }, {
+        id: 31,
+        title: "toString(), toExponential() & length",
+        topic: "functions",
+        difficulty: "easy",
+        desc: "Convert numbers to different base strings, scientific notation, and measure lengths.",
+        code: `${
+            sv('let')
+        } num = ${
+            sn('255')
+        };
+${
+            sv('let')
+        } big = ${
+            sn('9876543')
+        };
+
+console.${
+            sf('log')
+        }(num.${
+            sf('toString')
+        }());    ${
+            sc('// ___ (base 10)')
+        }
+console.${
+            sf('log')
+        }(num.${
+            sf('toString')
+        }(${
+            sn('2')
+        }));   ${
+            sc('// ___ (binary)')
+        }
+console.${
+            sf('log')
+        }(num.${
+            sf('toString')
+        }(${
+            sn('16')
+        }));  ${
+            sc('// ___ (hex)')
+        }
+console.${
+            sf('log')
+        }(big.${
+            sf('toExponential')
+        }());   ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(big.${
+            sf('toExponential')
+        }(${
+            sn('2')
+        })); ${
+            sc('// ___ (2 decimals)')
+        }
+
+${
+            sv('let')
+        } word = ${'<span class="str">"JavaScript"</span>'};
+console.${
+            sf('log')
+        }(word.${
+            sf('length')
+        });
+console.${
+            sf('log')
+        }(num.${
+            sf('toString')
+        }().${
+            sf('length')
+        });`,
+        guidance: [
+            "<code>.toString()</code> → <code>\"255\"</code> (base 10 by default)",
+            "<code>.toString(2)</code> → binary: <code>\"11111111\"</code>",
+            "<code>.toString(16)</code> → hex: <code>\"ff\"</code> (used in CSS colors!)",
+            "<code>.toExponential(2)</code> → <code>\"9.88e+6\"</code>",
+            "<code>.length</code> is a property — no parentheses"
+        ]
+    }, {
+        id: 32,
+        title: "at(), join(), isArray() & delete",
+        topic: "functions",
+        difficulty: "medium",
+        desc: "Access by index (including negatives!), join arrays, verify types, and delete slots.",
+        code: `${
+            sv('const')
+        } colors = [${'<span class="str">"red"</span>'}, ${'<span class="str">"green"</span>'}, ${'<span class="str">"blue"</span>'}, ${'<span class="str">"yellow"</span>'}];
+
+console.${
+            sf('log')
+        }(colors.${
+            sf('at')
+        }(${
+            sn('0')
+        }));   ${
+            sc('// ___ (first)')
+        }
+console.${
+            sf('log')
+        }(colors.${
+            sf('at')
+        }(-${
+            sn('1')
+        }));  ${
+            sc('// ___ (last!)')
+        }
+console.${
+            sf('log')
+        }(colors.${
+            sf('at')
+        }(-${
+            sn('2')
+        }));  ${
+            sc('// ___')
+        }
+console.${
+            sf('log')
+        }(colors.${
+            sf('join')
+        }(${'<span class="str">", "</span>'}));
+console.${
+            sf('log')
+        }(Array.${
+            sf('isArray')
+        }(colors));
+console.${
+            sf('log')
+        }(Array.${
+            sf('isArray')
+        }(${'<span class="str">"hello"</span>'}));
+${
+            sv('delete')
+        } colors[${
+            sn('1')
+        }];
+console.${
+            sf('log')
+        }(colors);
+console.${
+            sf('log')
+        }(colors.${
+            sf('length')
+        }); ${
+            sc('// ⚠️ still 4!')
+        }`,
+        guidance: [
+            "<code>.at(-1)</code> gets the last item — cleaner than <code>[arr.length-1]</code>",
+            "<code>.join(\", \")</code> converts array to string with separator",
+            "<code>Array.isArray()</code> is correct — <code>typeof []</code> wrongly returns <code>\"object\"</code>",
+            "<code>delete arr[1]</code> sets that slot to <code>undefined</code> — length stays the same!",
+            "Use <code>.splice()</code> to truly remove an element"
+        ]
+    }, {
+        id: 33,
+        title: "push, pop, shift, unshift, slice & splice",
+        topic: "functions",
+        difficulty: "medium",
+        desc: "Master the core array mutation methods — add, remove, copy, and insert.",
+        code: `${
+            sv('let')
+        } q = [${'<span class="str">"Alice"</span>'}, ${'<span class="str">"Bob"</span>'}, ${'<span class="str">"Carol"</span>'}];
+
+q.${
+            sf('push')
+        }(${'<span class="str">"Dave"</span>'}); console.${
+            sf('log')
+        }(q);
+${
+            sv('let')
+        } last = q.${
+            sf('pop')
+        }(); console.${
+            sf('log')
+        }(last, q);
+
+q.${
+            sf('unshift')
+        }(${'<span class="str">"Zara"</span>'}); console.${
+            sf('log')
+        }(q);
+${
+            sv('let')
+        } first = q.${
+            sf('shift')
+        }(); console.${
+            sf('log')
+        }(first, q);
+
+${
+            sc('// slice — non-destructive copy:')
+        }
+${
+            sv('let')
+        } part = q.${
+            sf('slice')
+        }(${
+            sn('0')
+        }, ${
+            sn('2')
+        });
+console.${
+            sf('log')
+        }(part, q); ${
+            sc('// original unchanged?')
+        }
+
+${
+            sc('// splice — cut & insert:')
+        }
+q.${
+            sf('splice')
+        }(${
+            sn('1')
+        }, ${
+            sn('1')
+        }, ${'<span class="str">"Eve"</span>'}, ${'<span class="str">"Frank"</span>'});
+console.${
+            sf('log')
+        }(q);`,
+        guidance: [
+            "<code>.push()</code> adds to end; <code>.pop()</code> removes and returns the last item",
+            "<code>.unshift()</code> adds to start; <code>.shift()</code> removes and returns the first",
+            "<code>.slice(0, 2)</code> returns a new array — original untouched",
+            "<code>.splice(1, 1, \"Eve\", \"Frank\")</code>: at index 1, delete 1, insert Eve & Frank",
+            "<strong>Memory trick</strong>: slice = safe copy; splice = surgically modifies original"
+        ]
+    },
+
+    /* Chapter 1 — Data Types: JS Objects (8 problems) */
+    { id: 34, title: "Object Properties (dot & bracket)", topic: "types", difficulty: "easy", desc: "Create an object with name and age. Access them using dot notation and bracket notation.", code: `${sv('const')} person = { name: ${ss('"Sam"')}, age: ${sn('25')} };\nconsole.${sf('log')}(person.${sb()}); ${sc('// "Sam"')}\nconsole.${sf('log')}(person[${sb()}]); ${sc('// 25')}`, guidance: ["Dot notation: <code>person.name</code> — key must be a valid identifier.", "Bracket notation: <code>person[\"age\"]</code> — use when key has spaces or is a variable.", "Fill first blank: <code>name</code>; second: <code>\"age\"</code> (string).", "Brackets allow dynamic keys: <code>person[keyVariable]</code>."] },
+    { id: 35, title: "Adding & Updating Properties", topic: "types", difficulty: "easy", desc: "Start with an empty object. Add properties one by one and then update one.", code: `${sv('const')} obj = ${sb()};\nobj.name = ${ss('"JS"')};\nobj.count = ${sn('1')};\nobj.count = ${sb()}; ${sc('// update to 2')}\nconsole.${sf('log')}(obj);`, guidance: ["Create empty object: <code>{}</code> or <code>new Object()</code>.", "Assign new key: <code>obj.key = value</code> adds or updates.", "Fill in: <code>2</code> to update <code>count</code> to 2.", "Objects are mutable — you can add and change properties anytime."] },
+    { id: 36, title: "Accessing Nested Elements", topic: "types", difficulty: "easy", desc: "Access a value nested inside an object (e.g. user.address.city).", code: `${sv('const')} user = { name: ${ss('"Alex"')}, address: { city: ${ss('"NYC"')}, zip: ${ss('"10001"')} } };\n${sv('const')} city = user.${sb()}.city;\nconsole.${sf('log')}(city); ${sc('// \"NYC\"')}`, guidance: ["Chain dot notation: <code>user.address.city</code>.", "Fill in: <code>address</code> to reach the nested object.", "Optional chaining: <code>user?.address?.city</code> avoids errors if a level is missing.", "Bracket style: <code>user[\"address\"][\"city\"]</code> works too."] },
+    { id: 37, title: "Object Method (function as property)", topic: "types", difficulty: "easy", desc: "Add a method greet to an object that returns a string using the object's name.", code: `${sv('const')} person = { name: ${ss('"Lee"')},\n  greet: ${sv('function')}() { ${sv('return')} ${ss('"Hi, "')} + ${sb()} + ${ss('"!"')}; }\n};\nconsole.${sf('log')}(person.${sf('greet')}());`, guidance: ["A method is a function stored as a property.", "Use <code>this.name</code> to refer to the object's name from inside the method.", "Fill in: <code>this.name</code> so the method returns \"Hi, Lee!\".", "Call with <code>person.greet()</code> — <code>this</code> will be <code>person</code>."] },
+    { id: 38, title: "The this Keyword in Object", topic: "types", difficulty: "medium", desc: "Use this inside an object method to access the object's properties and log them.", code: `${sv('const')} product = { name: ${ss('"Laptop"')}, price: ${sn('999')},\n  info() { console.${sf('log')}(${sv('this')}.name, ${sv('this')}.${sb()}); }\n};\nproduct.${sf('info')}(); ${sc('// Laptop 999')}`, guidance: ["<code>this</code> refers to the object that is calling the method.", "When you call <code>product.info()</code>, inside the method <code>this</code> is <code>product</code>.", "Fill in: <code>price</code> so it logs both name and price.", "If you extract the method and call it alone, <code>this</code> can be undefined or global."] },
+    { id: 39, title: "Object.keys() and Object.values()", topic: "types", difficulty: "easy", desc: "Get all keys and all values of an object as arrays using Object.keys and Object.values.", code: `${sv('const')} obj = { a: ${sn('1')}, b: ${sn('2')}, c: ${sn('3')} };\n${sv('const')} keys = Object.${sf('keys')}(${sb()});\n${sv('const')} vals = Object.${sf('values')}(obj);\nconsole.${sf('log')}(keys); ${sc('// [\"a\", \"b\", \"c\"]')}\nconsole.${sf('log')}(vals); ${sc('// [1, 2, 3]')}`, guidance: ["<code>Object.keys(obj)</code> returns an array of the object's own keys.", "<code>Object.values(obj)</code> returns an array of the object's values.", "Fill in: <code>obj</code> as the argument to <code>Object.keys()</code>.", "Use <code>Object.entries(obj)</code> for [key, value] pairs."] },
+    { id: 40, title: "Accessing with Variable Key", topic: "types", difficulty: "medium", desc: "Use a variable as the key to read a property from an object (bracket notation).", code: `${sv('const')} scores = { math: ${sn('90')}, eng: ${sn('85')}, sci: ${sn('88')} };\n${sv('const')} subject = ${ss('"math"')};\n${sv('const')} score = scores[${sb()}];\nconsole.${sf('log')}(score); ${sc('// 90')}`, guidance: ["Dot notation only works with literal keys: <code>obj.math</code>.", "When the key is in a variable, use brackets: <code>obj[subject]</code>.", "Fill in: <code>subject</code> (the variable name, no quotes).", "Dynamic access is common in loops: <code>for (const k of Object.keys(obj)) ... obj[k]</code>."] },
+    { id: 41, title: "Method Using this and Another Property", topic: "types", difficulty: "medium", desc: "Write an object with two properties and a method that uses both via this.", code: `${sv('const')} calc = { x: ${sn('10')}, y: ${sn('5')},\n  sum() { ${sv('return')} ${sv('this')}.x + ${sv('this')}.${sb()}; }\n};\nconsole.${sf('log')}(calc.${sf('sum')}()); ${sc('// 15')}`, guidance: ["Inside a method, <code>this</code> is the object.", "Use <code>this.x</code> and <code>this.y</code> to read the object's properties.", "Fill in: <code>y</code> so <code>sum()</code> returns 10 + 5 = 15.", "Methods can use any of the object's properties via <code>this</code>."] },
+
+    /* Chapter 1 — Built-in Functions (10 more) — Array, String, Object, Number & Math */
+    { id: 42, title: "Array .push() and .pop()", topic: "functions", difficulty: "easy", desc: "Add an item to the end of an array with .push() and remove the last item with .pop().", code: `${sv('let')} stack = [${ss('"a"')}, ${ss('"b"')}];\nstack.${sf('push')}(${ss('"c"')});\nconsole.${sf('log')}(stack); ${sc('// [\"a\", \"b\", \"c\"]')}\n${sv('const')} last = stack.${sf('pop')}();\nconsole.${sf('log')}(last, stack); ${sc('// \"c\" [\"a\", \"b\"]')}`, guidance: ["<code>.push(item)</code> adds to the end and returns the new length.", "<code>.pop()</code> removes and returns the last element (mutates the array).", "Stack pattern: push to add, pop to remove from the same end.", "Both methods mutate the original array."] },
+    { id: 43, title: "Array .shift() and .unshift()", topic: "functions", difficulty: "easy", desc: "Remove the first element with .shift() and add to the beginning with .unshift().", code: `${sv('let')} q = [${ss('"x"')}, ${ss('"y"')}, ${ss('"z"')}];\n${sv('const')} first = q.${sf('shift')}();\nconsole.${sf('log')}(first, q); ${sc('// \"x\" [\"y\", \"z\"]')}\nq.${sf('unshift')}(${ss('"w"')});\nconsole.${sf('log')}(q); ${sc('// [\"w\", \"y\", \"z\"]')}`, guidance: ["<code>.shift()</code> removes and returns the first element.", "<code>.unshift(item)</code> adds one or more items to the start.", "Queue pattern: push at end, shift from front (or vice versa).", "shift/unshift are slower than push/pop for large arrays (reindexing)."] },
+    { id: 44, title: "Array .includes() and .slice()", topic: "functions", difficulty: "easy", desc: "Check if an array contains a value with .includes(). Copy a portion with .slice(start, end).", code: `${sv('const')} arr = [${sn('10')}, ${sn('20')}, ${sn('30')}, ${sn('40')}];\nconsole.${sf('log')}(arr.${sf('includes')}(${sn('30')})); ${sc('// true')}\n${sv('const')} part = arr.${sf('slice')}(${sn('1')}, ${sn('3')});\nconsole.${sf('log')}(part); ${sc('// [20, 30] — end index not included')}`, guidance: ["<code>.includes(value)</code> returns true/false (uses SameValueZero).", "<code>.slice(start, end)</code> returns a new array; end is exclusive.", "slice does not mutate the original array.", "Negative indices: slice(-2) means last two elements."] },
+    { id: 45, title: "String .split(separator)", topic: "functions", difficulty: "easy", desc: "Split a string into an array of substrings using a separator.", code: `${sv('const')} csv = ${ss('"apple,banana,cherry"')};\n${sv('const')} fruits = csv.${sf('split')}(${sb()});\nconsole.${sf('log')}(fruits); ${sc('// [\"apple\", \"banana\", \"cherry\"]')}\n${sv('const')} chars = ${ss('"hi"')}.${sf('split')}(${ss('""')});\nconsole.${sf('log')}(chars); ${sc('// [\"h\", \"i\"]')}`, guidance: ["<code>.split(separator)</code> splits by the separator; result does not include it.", "Empty string <code>\"\"</code> as separator splits into single characters.", "Fill in: <code>\",\"</code> to split the CSV string.", "split is the inverse of <code>array.join(separator)</code>."] },
+    { id: 46, title: "String .replace() and .replaceAll()", topic: "functions", difficulty: "medium", desc: "Replace the first match with .replace() and all matches with .replaceAll().", code: `${sv('const')} s = ${ss('"foo bar foo"')};\nconsole.${sf('log')}(s.${sf('replace')}(${ss('"foo"')}, ${ss('"x"')})); ${sc('// \"x bar foo\"')}\nconsole.${sf('log')}(s.${sf('replaceAll')}(${ss('"foo"')}, ${ss('"x"')})); ${sc('// \"x bar x\"')}`, guidance: ["<code>.replace(search, replacement)</code> replaces only the first occurrence.", "<code>.replaceAll(search, replacement)</code> replaces every occurrence.", "Both accept a string or RegExp; replaceAll with string is ES2021.", "For regex global flag: <code>replace(/foo/g, 'x')</code> also replaces all."] },
+    { id: 47, title: "String .toLowerCase(), .toUpperCase(), .trim()", topic: "functions", difficulty: "easy", desc: "Normalize case with .toLowerCase() and .toUpperCase(); remove leading/trailing whitespace with .trim().", code: `${sv('const')} raw = ${ss('"  Hello WORLD  "')};\nconsole.${sf('log')}(raw.${sf('trim')}()); ${sc('// \"Hello WORLD\"')}\nconsole.${sf('log')}(raw.${sf('toLowerCase')}()); ${sc('// \"  hello world  \"')}\nconsole.${sf('log')}(raw.trim().${sf('toUpperCase')}()); ${sc('// \"HELLO WORLD\"')}`, guidance: ["<code>.trim()</code> removes whitespace from both ends (not in the middle).", "<code>.toLowerCase()</code> and <code>.toUpperCase()</code> return a new string; original unchanged.", "Chain them for normalized input: <code>str.trim().toLowerCase()</code>.", "These methods do not mutate the string (strings are immutable)."] },
+    { id: 48, title: "Object.keys(), .values(), .entries()", topic: "functions", difficulty: "easy", desc: "Get all keys with Object.keys(obj), all values with Object.values(obj), and [key, value] pairs with Object.entries(obj).", code: `${sv('const')} o = { x: ${sn('1')}, y: ${sn('2')} };\nconsole.${sf('log')}(Object.${sf('keys')}(o)); ${sc('// [\"x\", \"y\"]')}\nconsole.${sf('log')}(Object.${sf('values')}(o)); ${sc('// [1, 2]')}\nconsole.${sf('log')}(Object.${sf('entries')}(o)); ${sc('// [[\"x\",1], [\"y\",2]]')}`, guidance: ["<code>Object.keys(obj)</code> returns an array of own enumerable keys.", "<code>Object.values(obj)</code> returns an array of values.", "<code>Object.entries(obj)</code> returns [key, value] pairs — useful for loops.", "All return arrays; order matches property creation for string keys."] },
+    { id: 49, title: "Object.assign()", topic: "functions", difficulty: "medium", desc: "Merge properties from one or more source objects into a target using Object.assign().", code: `${sv('const')} target = { a: ${sn('1')} };\n${sv('const')} src = { b: ${sn('2')}, c: ${sn('3')} };\nObject.${sf('assign')}(${sb()}, src);\nconsole.${sf('log')}(target); ${sc('// { a: 1, b: 2, c: 3 }')}`, guidance: ["<code>Object.assign(target, ...sources)</code> copies own enumerable properties into target.", "Fill in: <code>target</code> as the first argument (it is mutated).", "Later sources overwrite earlier ones for the same key.", "For a new object: <code>Object.assign({}, a, b)</code> — shallow copy."] },
+    { id: 50, title: "Object.freeze()", topic: "functions", difficulty: "medium", desc: "Make an object immutable with Object.freeze() so new properties cannot be added and existing ones cannot be changed.", code: `${sv('const')} config = Object.${sf('freeze')}({ env: ${ss('"prod"')}, port: ${sn('8080')} });\nconfig.port = ${sn('3000')}; ${sc('// no effect in strict mode; throws or silently fails')}\nconfig.extra = ${ss('"x"')}; ${sc('// ignored')}\nconsole.${sf('log')}(config.port); ${sc('// 8080')}`, guidance: ["<code>Object.freeze(obj)</code> prevents adding, removing, or changing properties.", "Frozen object is shallow: nested objects can still be mutated.", "In strict mode, assigning to a frozen property throws TypeError.", "Use for config objects or constants."] },
+    { id: 51, title: "Number .toFixed(), parseInt, Math.round/floor/max/random", topic: "functions", difficulty: "medium", desc: "Format with .toFixed(n), parse with Number.parseInt(), round with Math.round/floor, get max with Math.max(), and random with Math.random().", code: `console.${sf('log')}((${sn('3.456')}).${sf('toFixed')}(${sn('2')})); ${sc('// \"3.46\" (string!)')}\nconsole.${sf('log')}(Number.${sf('parseInt')}(${ss('"42"')})); ${sc('// 42')}\nconsole.${sf('log')}(Math.${sf('round')}(${sn('4.7')}), Math.${sf('floor')}(${sn('4.7')})); ${sc('// 5, 4')}\nconsole.${sf('log')}(Math.${sf('max')}(${sn('1')}, ${sn('5')}, ${sn('3')})); ${sc('// 5')}\nconsole.${sf('log')}(Math.${sf('random')}()); ${sc('// 0 <= x < 1')}`, guidance: ["<code>.toFixed(n)</code> rounds to n decimals and returns a string.", "<code>Number.parseInt(s)</code> (or <code>parseInt(s)</code>) converts string to integer.", "<code>Math.round()</code> to nearest; <code>Math.floor()</code> always down.", "<code>Math.max(a,b,...)</code> returns the largest; <code>Math.random()</code> returns 0 ≤ x < 1."] }
+];
+
+/* ─────────────────────────────────────────────
+   CHAPTER 2 — 25 PROBLEMS
+───────────────────────────────────────────── */
+const ch2 = [
+    {
+        id: 1,
+        title: "Basic if / else",
+        topic: "if",
+        difficulty: "easy",
+        desc: "Write conditions to check if a number is positive, negative, or zero.",
+        code: `${
+            sv('let')
+        } num = -${
+            sn('7')
+        };
+
+${
+            sv('if')
+        } (${
+            sb()
+        }) {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Positive"</span>'});
+} ${
+            sv('else if')
+        } (${
+            sb()
+        }) {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Negative"</span>'});
+} ${
+            sv('else')
+        } {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Zero"</span>'});
+}`,
+        guidance: [
+            "First condition: <code>num > 0</code>",
+            "Second condition: <code>num < 0</code>",
+            "The <code>else</code> block runs only when both are false — meaning it must be zero",
+            "Try changing num to 0, 5, and -3 to test all branches",
+            "JS checks conditions <strong>top to bottom</strong> and stops at the first match"
+        ]
+    },
+
+    {
+        id: 2,
+        title: "Grade Calculator — if / else if",
+        topic: "if",
+        difficulty: "easy",
+        desc: "Assign a letter grade from a score using an if/else if chain.",
+        code: `${
+            sv('let')
+        } score = ${
+            sn('74')
+        };
+${
+            sv('let')
+        } grade;
+
+${
+            sv('if')
+        } (score >= ${
+            sb()
+        }) {
+  grade = ${'<span class="str">"A"</span>'};
+} ${
+            sv('else if')
+        } (score >= ${
+            sb()
+        }) {
+  grade = ${'<span class="str">"B"</span>'};
+} ${
+            sv('else if')
+        } (score >= ${
+            sb()
+        }) {
+  grade = ${'<span class="str">"C"</span>'};
+} ${
+            sv('else if')
+        } (score >= ${
+            sb()
+        }) {
+  grade = ${'<span class="str">"D"</span>'};
+} ${
+            sv('else')
+        } {
+  grade = ${'<span class="str">"F"</span>'};
+}
+console.${
+            sf('log')
+        }(${'<span class="str">"Grade:"</span>'}, grade); ${
+            sc('// C')
+        }`,
+        guidance: ["Thresholds: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, else F", "With score = 74, the answer should be <code>\"C\"</code>", "Conditions check top-to-bottom — no upper bound needed with <code>>=</code>", "Try changing score to 95, 55, 80 to test all branches"]
+    },
+
+    {
+        id: 3,
+        title: "Ternary One-Liners",
+        topic: "if",
+        difficulty: "easy",
+        desc: "Write compact one-liner conditionals using the ternary operator.",
+        code: `${
+            sv('let')
+        } temp = ${
+            sn('35')
+        };
+${
+            sv('let')
+        } age  = ${
+            sn('16')
+        };
+${
+            sv('let')
+        } cart = ${
+            sn('0')
+        };
+
+${
+            sc('// Hot or Cold?')
+        }
+${
+            sv('let')
+        } weather = temp > ${
+            sn('30')
+        } ? ${
+            sb()
+        } : ${
+            sb()
+        };
+
+${
+            sc('// Can drive? (age >= 18)')
+        }
+${
+            sv('let')
+        } canDrive = ${
+            sb()
+        };
+
+${
+            sc('// Cart badge (hide when 0)')
+        }
+${
+            sv('let')
+        } badge = cart > ${
+            sn('0')
+        } ? ${'`${cart} items`'} : ${
+            sb()
+        };
+
+console.${
+            sf('log')
+        }(weather, canDrive, badge);`,
+        guidance: [
+            "Ternary: <code>condition ? trueValue : falseValue</code>",
+            "#1: <code>temp > 30 ? \"Hot\" : \"Cold\"</code> → <code>\"Hot\"</code>",
+            "#2: <code>age >= 18 ? \"Yes\" : \"No\"</code> → <code>\"No\"</code>",
+            "#3: when cart is 0, return <code>\"\"</code> or <code>null</code> to hide",
+            "Ternaries are best for simple two-outcome decisions"
+        ]
+    },
+
+    {
+        id: 4,
+        title: "Nested if Statements",
+        topic: "if",
+        difficulty: "medium",
+        desc: "Check two conditions: is the user logged in, and are they an admin?",
+        code: `${
+            sv('let')
+        } isLoggedIn = ${
+            sv('true')
+        };
+${
+            sv('let')
+        } isAdmin    = ${
+            sv('false')
+        };
+
+${
+            sv('if')
+        } (${
+            sb()
+        }) {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Welcome!"</span>'});
+
+  ${
+            sv('if')
+        } (${
+            sb()
+        }) {
+    console.${
+            sf('log')
+        }(${'<span class="str">"Admin panel access."</span>'});
+  } ${
+            sv('else')
+        } {
+    console.${
+            sf('log')
+        }(${'<span class="str">"Standard access."</span>'});
+  }
+
+} ${
+            sv('else')
+        } {
+  console.${
+            sf('log')
+        }(${'<span class="str">"Please log in."</span>'});
+}`,
+        guidance: [
+            "Outer if: checks <code>isLoggedIn</code>",
+            "Inner if: checks <code>isAdmin</code> — only runs if outer check passed",
+            "With true/false: prints 'Welcome!' then 'Standard access.'",
+            "Try <code>isLoggedIn = false</code> to skip to the outer else",
+            "Consider combining with <code>&&</code> to flatten deep nesting"
+        ]
+    }, {
+        id: 5,
+        title: "Nested Ternary",
+        topic: "if",
+        difficulty: "medium",
+        desc: "Chain ternaries to replace an if/else if/else — then judge if it's readable!",
+        code: `${
+            sv('let')
+        } score = ${
+            sn('55')
+        };
+
+${
+            sv('let')
+        } result1;
+${
+            sv('if')
+        } (score >= ${
+            sn('80')
+        })      result1 = ${'<span class="str">"Excellent"</span>'};
+${
+            sv('else if')
+        } (score >= ${
+            sn('60')
+        }) result1 = ${'<span class="str">"Pass"</span>'};
+${
+            sv('else')
+        }                   result1 = ${'<span class="str">"Fail"</span>'};
+
+${
+            sc('// Rewrite as nested ternary:')
+        }
+${
+            sv('let')
+        } result2 = score >= ${
+            sn('80')
+        } ? ${
+            sb()
+        }
+             : score >= ${
+            sn('60')
+        } ? ${
+            sb()
+        }
+             : ${
+            sb()
+        };
+
+console.${
+            sf('log')
+        }(result1, result2);`,
+        guidance: ["Fill in <code>\"Excellent\"</code>, <code>\"Pass\"</code>, <code>\"Fail\"</code>", "With score = 55: neither condition met → result is <code>\"Fail\"</code>", "Both variables should print the same value", "Nested ternaries can hurt readability — limit to 2–3 levels max"]
+    }, {
+        id: 6,
+        title: "switch — Day Name",
+        topic: "switch",
+        difficulty: "easy",
+        desc: "Use a switch to return the day name from a number (1–7). Complete the missing cases.",
+        code: `${
+            sv('let')
+        } day = ${
+            sn('3')
+        };
+${
+            sv('let')
+        } dayName;
+
+${
+            sv('switch')
+        } (day) {
+  ${
+            sv('case')
+        } ${
+            sn('1')
+        }: dayName = ${'<span class="str">"Monday"</span>'};    ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${
+            sb()
+        }: dayName = ${'<span class="str">"Tuesday"</span>'};   ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${
+            sb()
+        }: dayName = ${'<span class="str">"Wednesday"</span>'}; ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${
+            sn('4')
+        }: dayName = ${'<span class="str">"Thursday"</span>'};  ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${
+            sn('5')
+        }: dayName = ${'<span class="str">"Friday"</span>'};    ${
+            sv('break')
+        };
+  ${
+            sv('default')
+        }: dayName = ${'<span class="str">"Weekend"</span>'};
+}
+console.${
+            sf('log')
+        }(dayName); ${
+            sc('// "Wednesday"')
+        }`,
+        guidance: ["Fill in <code>2</code> for Tuesday and <code>3</code> for Wednesday", "switch uses <strong>strict equality</strong> (===) to compare each case", "<code>break</code> stops execution — without it, code <strong>falls through</strong> to the next case!", "<code>default</code> runs if no case matches — like else"]
+    }, {
+        id: 7,
+        title: "switch — Season Fall-Through",
+        topic: "switch",
+        difficulty: "medium",
+        desc: "Group months by season using intentional fall-through — multiple cases, one action.",
+        code: `${
+            sv('let')
+        } month = ${
+            sn('4')
+        }; ${
+            sc('// April')
+        }
+
+${
+            sv('switch')
+        } (month) {
+  ${
+            sv('case')
+        } ${
+            sn('12')
+        }: ${
+            sv('case')
+        } ${
+            sn('1')
+        }: ${
+            sv('case')
+        } ${
+            sn('2')
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"Winter"</span>'}); ${
+            sv('break')
+        };
+
+  ${
+            sv('case')
+        } ${
+            sb()
+        }: ${
+            sv('case')
+        } ${
+            sb()
+        }: ${
+            sv('case')
+        } ${
+            sb()
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"Spring"</span>'}); ${
+            sv('break')
+        };
+
+  ${
+            sv('case')
+        } ${
+            sn('6')
+        }: ${
+            sv('case')
+        } ${
+            sn('7')
+        }: ${
+            sv('case')
+        } ${
+            sn('8')
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"Summer"</span>'}); ${
+            sv('break')
+        };
+
+  ${
+            sv('default')
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"Autumn"</span>'});
+}`,
+        guidance: [
+            "Spring months: 3 (March), 4 (April), 5 (May)",
+            "Cases with no break between them <strong>fall through</strong> to share the same action",
+            "This is intentional fall-through — a useful grouping pattern",
+            "With month = 4: matches case 4, falls to 'Spring'",
+            "The single break prevents falling into Summer"
+        ]
+    }, {
+        id: 8,
+        title: "switch — String Commands",
+        topic: "switch",
+        difficulty: "medium",
+        desc: "Build a simple text command processor using a switch with string cases.",
+        code: `${
+            sv('let')
+        } command = ${'<span class="str">"start"</span>'};
+
+${
+            sv('switch')
+        } (command) {
+  ${
+            sv('case')
+        } ${
+            sb()
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"▶ Game started!"</span>'});
+    ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${'<span class="str">"pause"</span>'}:
+    console.${
+            sf('log')
+        }(${'<span class="str">"⏸ Game paused."</span>'});
+    ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${
+            sb()
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"⏹ Game stopped."</span>'});
+    ${
+            sv('break')
+        };
+  ${
+            sv('case')
+        } ${'<span class="str">"restart"</span>'}:
+    console.${
+            sf('log')
+        }(${'<span class="str">"🔄 Restarting..."</span>'});
+    ${
+            sv('break')
+        };
+  ${
+            sv('default')
+        }:
+    console.${
+            sf('log')
+        }(${'<span class="str">"❓ Unknown command."</span>'});
+}`,
+        guidance: [
+            "Fill in <code>\"start\"</code> and <code>\"stop\"</code> for the two blanks",
+            "switch works with strings too — uses strict equality (===)",
+            "With <code>command = \"start\"</code>: prints '▶ Game started!'",
+            "Try setting command to 'reset' — it should hit the default case",
+            "switch is great when you have many exact string/number matches"
+        ]
+    }, {
+        id: 9,
+        title: "for Loop Basics",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Write a for loop to count from 1 to 5, then loop over an array.",
+        code: `${
+            sc('// Count 1 to 5:')
+        }
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sb()
+        }; i <= ${
+            sb()
+        }; i++) {
+  console.${
+            sf('log')
+        }(i);
+}
+
+${
+            sc('// Loop over array:')
+        }
+${
+            sv('const')
+        } animals = [${'<span class="str">"cat"</span>'}, ${'<span class="str">"dog"</span>'}, ${'<span class="str">"bird"</span>'}];
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('0')
+        }; i < animals.${
+            sf('length')
+        }; i++) {
+  console.${
+            sf('log')
+        }(animals[${
+            sb()
+        }]);
+}`,
+        guidance: [
+            "For loop syntax: <code>for (init; condition; update)</code>",
+            "Count 1 to 5: start at <code>i = 1</code>, condition <code>i <= 5</code>",
+            "For array: start at <code>i = 0</code>, go while <code>i < animals.length</code>",
+            "Access each item with <code>animals[i]</code>",
+            "Array indexes start at 0 — the last index is <code>length - 1</code>"
+        ]
+    }, {
+        id: 10,
+        title: "while Loop",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use a while loop to simulate a countdown and a dice roller.",
+        code: `${
+            sc('// Countdown from 5:')
+        }
+${
+            sv('let')
+        } count = ${
+            sn('5')
+        };
+${
+            sv('while')
+        } (${
+            sb()
+        }) {
+  console.${
+            sf('log')
+        }(count);
+  count${
+            sb()
+        };
+}
+console.${
+            sf('log')
+        }(${'<span class="str">"Blast off! 🚀"</span>'});
+
+${
+            sc('// Roll dice until we get 6:')
+        }
+${
+            sv('let')
+        } roll = ${
+            sn('0')
+        };
+${
+            sv('let')
+        } attempts = ${
+            sn('0')
+        };
+${
+            sv('while')
+        } (roll !== ${
+            sn('6')
+        }) {
+  roll = Math.${
+            sf('floor')
+        }(Math.${
+            sf('random')
+        }() * ${
+            sn('6')
+        }) + ${
+            sn('1')
+        };
+  attempts++;
+}
+console.${
+            sf('log')
+        }(${'`Rolled 6 in ${attempts} tries!`'});`,
+        guidance: [
+            "while syntax: <code>while (condition) { ... }</code>",
+            "Condition: <code>count > 0</code> — loop runs as long as count is above zero",
+            "Update: <code>count--</code> decrements inside the loop to avoid infinite looping!",
+            "Dice: <code>Math.floor(Math.random() * 6) + 1</code> gives a random 1–6",
+            "Make sure every while loop has a way to eventually become false"
+        ]
+    }, {
+        id: 11,
+        title: "do-while Loop",
+        topic: "loops",
+        difficulty: "medium",
+        desc: "Use do-while to guarantee the body runs at least once — even if the condition is false.",
+        code: `${
+            sc('// Always runs at least once:')
+        }
+${
+            sv('let')
+        } num = ${
+            sn('10')
+        };
+
+${
+            sv('do')
+        } {
+  console.${
+            sf('log')
+        }(${'<span class="str">"num is:"</span>'}, num);
+  num += ${
+            sn('10')
+        };
+} ${
+            sv('while')
+        } (${
+            sb()
+        }); ${
+            sc('// stop when num >= 50')
+        }
+
+${
+            sc('// Real use: input validation simulation')
+        }
+${
+            sv('let')
+        } input = ${'<span class="str">""</span>'};
+${
+            sv('let')
+        } attempts = ${
+            sn('0')
+        };
+${
+            sv('do')
+        } {
+  input = attempts === ${
+            sn('0')
+        } ? ${'<span class="str">""</span>'} : ${'<span class="str">"hello"</span>'};
+  attempts++;
+} ${
+            sv('while')
+        } (${
+            sb()
+        });
+console.${
+            sf('log')
+        }(${'`Got valid input after ${attempts} attempts`'});`,
+        guidance: [
+            "<strong>do-while</strong> runs the block first, checks the condition after",
+            "The body always executes at least once — unlike while",
+            "For countdown: condition is <code>num < 50</code>",
+            "For input: condition is <code>input === \"\"</code> — keep looping while input is empty",
+            "do-while is great for 'run once, then check if we need to repeat'"
+        ]
+    }, {
+        id: 12,
+        title: "for...of Loop",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use for...of to iterate over arrays and strings without index tracking.",
+        code: `${
+            sv('const')
+        } fruits = [${'<span class="str">"apple"</span>'}, ${'<span class="str">"banana"</span>'}, ${'<span class="str">"mango"</span>'}];
+
+${
+            sc('// Loop over array values:')
+        }
+${
+            sv('for')
+        } (${
+            sv('const')
+        } ${
+            sb()
+        } ${
+            sv('of')
+        } fruits) {
+  console.${
+            sf('log')
+        }(${
+            sb()
+        });
+}
+
+${
+            sc('// Loop over a string (char by char):')
+        }
+${
+            sv('const')
+        } word = ${'<span class="str">"CODE"</span>'};
+${
+            sv('for')
+        } (${
+            sv('const')
+        } char ${
+            sv('of')
+        } word) {
+  console.${
+            sf('log')
+        }(char);
+}
+
+${
+            sc('// Sum all numbers:')
+        }
+${
+            sv('const')
+        } nums = [${
+            sn('10')
+        }, ${
+            sn('20')
+        }, ${
+            sn('30')
+        }];
+${
+            sv('let')
+        } total = ${
+            sn('0')
+        };
+${
+            sv('for')
+        } (${
+            sv('const')
+        } n ${
+            sv('of')
+        } nums) total ${
+            sb()
+        }= n;
+console.${
+            sf('log')
+        }(${'<span class="str">"Total:"</span>'}, total);`,
+        guidance: [
+            "<code>for...of</code> gives you the <strong>value directly</strong> — no index needed",
+            "Fill in <code>fruit</code> and use it in the log",
+            "It works on any iterable: arrays, strings, Sets, Maps",
+            "For string: each character is accessed one by one",
+            "For the sum: use <code>+=</code> to accumulate"
+        ]
+    }, {
+        id: 13,
+        title: "break — Stop a Loop Early",
+        topic: "control",
+        difficulty: "medium",
+        desc: "Use break to exit a loop as soon as you find what you're looking for.",
+        code: `${
+            sv('const')
+        } names = [${'<span class="str">"Alice"</span>'}, ${'<span class="str">"Bob"</span>'}, ${'<span class="str">"Carol"</span>'}, ${'<span class="str">"Dave"</span>'}];
+${
+            sv('const')
+        } target = ${'<span class="str">"Carol"</span>'};
+${
+            sv('let')
+        } found = ${
+            sv('false')
+        };
+
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('0')
+        }; i < names.${
+            sf('length')
+        }; i++) {
+  ${
+            sv('if')
+        } (names[i] === target) {
+    console.${
+            sf('log')
+        }(${'`Found ${target} at index ${i}!`'});
+    found = ${
+            sv('true')
+        };
+    ${
+            sb()
+        };  ${
+            sc('// stop searching')
+        }
+  }
+}
+
+${
+            sv('if')
+        } (!found) console.${
+            sf('log')
+        }(${'<span class="str">"Not found."</span>'});`,
+        guidance: [
+            "<code>break</code> immediately exits the loop — no more iterations run",
+            "Fill in <code>break</code> inside the if block",
+            "Without break, the loop would keep running needlessly after finding Carol",
+            "<strong>Common use</strong>: search loops, input processing, finding first match",
+            "<code>break</code> only exits the <strong>innermost</strong> loop it's inside"
+        ]
+    }, {
+        id: 14,
+        title: "continue — Skip an Iteration",
+        topic: "control",
+        difficulty: "medium",
+        desc: "Use continue to skip specific iterations while letting the loop keep running.",
+        code: `${
+            sc('// Print only odd numbers 1-10:')
+        }
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('1')
+        }; i <= ${
+            sn('10')
+        }; i++) {
+  ${
+            sv('if')
+        } (i % ${
+            sn('2')
+        } === ${
+            sn('0')
+        }) {
+    ${
+            sb()
+        };  ${
+            sc('// skip evens')
+        }
+  }
+  console.${
+            sf('log')
+        }(i);
+}
+
+${
+            sc('// Skip items that start with "B":')
+        }
+${
+            sv('const')
+        } items = [${'<span class="str">"Apple"</span>'}, ${'<span class="str">"Banana"</span>'}, ${'<span class="str">"Blueberry"</span>'}, ${'<span class="str">"Mango"</span>'}];
+${
+            sv('for')
+        } (${
+            sv('const')
+        } item ${
+            sv('of')
+        } items) {
+  ${
+            sv('if')
+        } (item.${
+            sf('startsWith')
+        }(${'<span class="str">"B"</span>'})) ${
+            sb()
+        };
+  console.${
+            sf('log')
+        }(item);
+}`,
+        guidance: [
+            "<code>continue</code> skips the rest of the current iteration and moves to the next",
+            "Fill in <code>continue</code> in both blanks",
+            "For odds: <code>i % 2 === 0</code> catches evens → skip them",
+            "For items: <code>.startsWith(\"B\")</code> catches Banana and Blueberry → skip them",
+            "Unlike break, continue doesn't exit the loop — just skips one round"
+        ]
+    }, {
+        id: 15,
+        title: "break & continue Together",
+        topic: "control",
+        difficulty: "hard",
+        desc: "Combine break and continue in a loop to skip some values and stop at a target.",
+        code: `${
+            sv('const')
+        } scores = [${
+            sn('45')
+        }, ${
+            sn('72')
+        }, ${
+            sn('33')
+        }, ${
+            sn('91')
+        }, ${
+            sn('60')
+        }, ${
+            sn('88')
+        }];
+
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('0')
+        }; i < scores.${
+            sf('length')
+        }; i++) {
+  ${
+            sc('// Skip scores below 50:')
+        }
+  ${
+            sv('if')
+        } (scores[i] < ${
+            sn('50')
+        }) {
+    console.${
+            sf('log')
+        }(${'`Skipping ${scores[i]}`'});
+    ${
+            sb()
+        };
+  }
+
+  ${
+            sc('// Stop if we hit a perfect score (>=90):')
+        }
+  ${
+            sv('if')
+        } (scores[i] >= ${
+            sn('90')
+        }) {
+    console.${
+            sf('log')
+        }(${'`Found top score: ${scores[i]} — stopping!`'});
+    ${
+            sb()
+        };
+  }
+
+  console.${
+            sf('log')
+        }(${'`Valid score: ${scores[i]}`'});
+}`,
+        guidance: [
+            "First blank: <code>continue</code> — skip scores below 50 and move to next iteration",
+            "Second blank: <code>break</code> — stop the entire loop when we hit 91",
+            "Trace: 45 → skip; 72 → valid; 33 → skip; 91 → found! stop",
+            "Scores after 91 (60, 88) are never processed because break exits",
+            "This pattern is common in data processing — filter + early exit"
+        ]
+    }, {
+        id: 16,
+        title: "for Loop — Print 0 to 4",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use a for loop to print the numbers 0, 1, 2, 3, 4 to the console.",
+        code: `${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('0')
+        }; i < ${
+            sb()
+        }; i++) {
+  console.${
+            sf('log')
+        }(i);
+}`,
+        guidance: ["Start at <code>i = 0</code>", "Keep looping while <code>i < 5</code> so 0,1,2,3,4 are printed", "Use <code>i++</code> to move to the next number", "This is the most common loop pattern for counting"]
+    }, {
+        id: 17,
+        title: "for Loop — Sum 1 to 10",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use a for loop to add the numbers from 1 to 10 and log the total.",
+        code: `${
+            sv('let')
+        } total = ${
+            sn('0')
+        };
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('1')
+        }; i <= ${
+            sn('10')
+        }; i++) {
+  total ${
+            sb()
+        } i;
+}
+console.${
+            sf('log')
+        }(${'<span class="str">"Sum:"</span>'}, total); ${
+            sc('// 55')
+        }`,
+        guidance: ["Start with <code>total = 0</code>", "Loop from <code>i = 1</code> to <code>i <= 10</code>", "Add each <code>i</code> to total: <code>total += i</code>", "The answer should be 1+2+...+10 = 55"]
+    }, {
+        id: 18,
+        title: "for Loop — Print Each Letter",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Loop through a string and print each character on its own line.",
+        code: `${
+            sv('let')
+        } word = ${'<span class="str">"Hi"</span>'};
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('0')
+        }; i < word.${
+            sf('length')
+        }; i++) {
+  console.${
+            sf('log')
+        }(word[${
+            sb()
+        }]);
+}`,
+        guidance: ["Strings have a <code>.length</code> property", "Use <code>word[i]</code> to get the character at index i", "Start at 0 and go while <code>i < word.length</code>", "You'll see 'H' then 'i' logged"]
+    }, {
+        id: 19,
+        title: "for Loop — Count Backwards",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use a for loop to print 5, 4, 3, 2, 1 (backwards).",
+        code: `${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('5')
+        }; i >= ${
+            sn('1')
+        }; i${
+            sb()
+        }) {
+  console.${
+            sf('log')
+        }(i);
+}`,
+        guidance: ["Start at <code>i = 5</code>", "Condition: <code>i >= 1</code> so we include 1", "Use <code>i--</code> to decrease by 1 each time", "Same loop structure, just different start and step"]
+    }, {
+        id: 20,
+        title: "for Loop — Even Numbers Only",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Print only the even numbers from 2 to 10 (2, 4, 6, 8, 10).",
+        code: `${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('2')
+        }; i <= ${
+            sn('10')
+        }; i ${
+            sb()
+        }= ${
+            sn('2')
+        }) {
+  console.${
+            sf('log')
+        }(i);
+}`,
+        guidance: ["Start at 2, the first even number", "Use <code>i += 2</code> to jump by 2 each time", "Condition <code>i <= 10</code> includes 10", "You can also use <code>if (i % 2 === 0)</code> inside a 1–10 loop"]
+    }, {
+        id: 21,
+        title: "for Loop — Array of Squares",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Build an array containing the squares of 1, 2, 3, 4, 5 using a for loop.",
+        code: `${
+            sv('let')
+        } squares = [];
+${
+            sv('for')
+        } (${
+            sv('let')
+        } i = ${
+            sn('1')
+        }; i <= ${
+            sn('5')
+        }; i++) {
+  squares.${
+            sf('push')
+        }(i ${
+            sb()
+        } i);
+}
+console.${
+            sf('log')
+        }(squares); ${
+            sc('// [1, 4, 9, 16, 25]')
+        }`,
+        guidance: ["Start with an empty array <code>[]</code>", "<code>.push(value)</code> adds to the end of the array", "Each element is <code>i * i</code> (i squared)", "Loop from 1 to 5 inclusive"]
+    }, {
+        id: 22,
+        title: "for Loop — Nested Loop (Grid)",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use two for loops to print a 3x3 grid: three rows, three asterisks per row.",
+        code: `${
+            sv('for')
+        } (${
+            sv('let')
+        } row = ${
+            sn('0')
+        }; row < ${
+            sn('3')
+        }; row++) {
+  ${
+            sv('let')
+        } line = ${'<span class="str">""</span>'};
+  ${
+            sv('for')
+        } (${
+            sv('let')
+        } col = ${
+            sn('0')
+        }; col < ${
+            sn('3')
+        }; col++) {
+    line ${
+            sb()
+        } ${'<span class="str">"*"</span>'};
+  }
+  console.${
+            sf('log')
+        }(line);
+}`,
+        guidance: ["Outer loop: 3 rows (row = 0, 1, 2)", "Inner loop: 3 asterisks per row (col = 0, 1, 2)", "Build a string with <code>line += \"*\"</code>", "You'll see '***' logged three times"]
+    }, {
+        id: 23,
+        title: "while Loop — Print 1 to 5",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Use a while loop to print the numbers 1, 2, 3, 4, 5.",
+        code: `${
+            sv('let')
+        } n = ${
+            sn('1')
+        };
+${
+            sv('while')
+        } (${
+            sb()
+        }) {
+  console.${
+            sf('log')
+        }(n);
+  n++;
+}
+${sc('// Stop when n becomes 6')}`,
+        guidance: ["Start with <code>n = 1</code>", "Condition: <code>n <= 5</code> so we print 1 through 5", "Don't forget <code>n++</code> or the loop never ends!", "while is great when you don't know the count in advance"]
+    }, {
+        id: 24,
+        title: "while Loop — Sum Until 20",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Add numbers 1, 2, 3, ... with a while loop until the sum is greater than 20. Log the sum.",
+        code: `${
+            sv('let')
+        } sum = ${
+            sn('0')
+        };
+${
+            sv('let')
+        } num = ${
+            sn('1')
+        };
+${
+            sv('while')
+        } (${
+            sb()
+        }) {
+  sum += num;
+  num++;
+}
+console.${
+            sf('log')
+        }(${'<span class="str">"Sum:"</span>'}, sum);`,
+        guidance: ["Keep looping while <code>sum <= 20</code> (or <code>sum < 21</code>)", "Add <code>num</code> to sum, then increment num", "When sum exceeds 20, the condition fails and we exit", "Result will be 1+2+3+4+5+6 = 21"]
+    }, {
+        id: 25,
+        title: "while Loop — First Multiple of 7",
+        topic: "loops",
+        difficulty: "easy",
+        desc: "Start at 1 and use a while loop to find the first number divisible by 7. Log it.",
+        code: `${
+            sv('let')
+        } x = ${
+            sn('1')
+        };
+${
+            sv('while')
+        } (x % ${
+            sn('7')
+        } !== ${
+            sn('0')
+        }) {
+  x++;
+}
+console.${
+            sf('log')
+        }(${'<span class="str">"First multiple of 7:"</span>'}, x); ${
+            sc('// 7')
+        }`,
+        guidance: ["<code>x % 7</code> is the remainder when x is divided by 7", "Loop while the remainder is not 0 (not divisible)", "Increment <code>x++</code> until we hit 7", "7 % 7 === 0, so we stop and log 7"]
+    }
+];
+
+/* ─────────────────────────────────────────────
+   CHAPTER 3 — 50 PROBLEMS (JS Functions)
+───────────────────────────────────────────── */
+const ch3 = [
+  { id: 1, title: "Function Declaration", topic: "definition", difficulty: "easy", desc: "Write a function declaration that takes two numbers and returns their sum.", code: `${sv('function')} ${sf('add')}(a, b) {\n  ${sv('return')} a + b;\n}\nconsole.${sf('log')}(${sf('add')}(${sn('2')}, ${sn('3')})); ${sc('// 5')}`, guidance: ["Use the <code>function</code> keyword followed by the function name.", "Parameters go in parentheses: <code>(a, b)</code>.", "Use <code>return</code> to send a value back.", "Function declarations are hoisted — you can call them before they appear in the code."] },
+  { id: 2, title: "Function Expression", topic: "definition", difficulty: "easy", desc: "Create the same add function using a function expression (assign to a variable).", code: `${sv('const')} add = ${sv('function')}(a, b) {\n  ${sv('return')} a + b;\n};\nconsole.${sf('log')}(add(${sn('10')}, ${sn('5')}));`, guidance: ["The function has no name after <code>function</code> — it's anonymous.", "The variable <code>add</code> holds the function reference.", "Function expressions are NOT hoisted; you must define before you call.", "Common pattern: <code>const fn = function() { ... };</code>"] },
+  { id: 3, title: "Arrow Function", topic: "definition", difficulty: "easy", desc: "Rewrite the add function as an arrow function.", code: `${sv('const')} add = (a, b) => ${sb()};\nconsole.${sf('log')}(add(${sn('1')}, ${sn('2')}));`, guidance: ["Arrow syntax: <code>(params) => expression</code> or <code>(params) => { return x; }</code>.", "For a single expression, you can omit <code>return</code> and the braces.", "Fill in: <code>a + b</code> (no semicolon inside).", "Arrow functions don't have their own <code>this</code> — they inherit from the enclosing scope."] },
+  { id: 4, title: "Anonymous Function as Callback", topic: "definition", difficulty: "easy", desc: "Pass an anonymous function to array.map to double each number.", code: `${sv('const')} nums = [${sn('1')}, ${sn('2')}, ${sn('3')}];\n${sv('const')} doubled = nums.${sf('map')}(${sv('function')}(n) { ${sv('return')} n * ${sn('2')} });\nconsole.${sf('log')}(doubled); ${sc('// [2, 4, 6]')}`, guidance: ["The function passed to <code>.map()</code> has no name — it's anonymous.", "It runs once per element; <code>n</code> is each item.", "Return the new value for that position.", "You could also use an arrow: <code>n => n * 2</code>."] },
+  { id: 5, title: "Method on Object", topic: "definition", difficulty: "easy", desc: "Add a method greet to an object that returns a greeting string.", code: `${sv('const')} user = {\n  name: ${ss('"Alex"')},\n  greet: ${sv('function')}() { ${sv('return')} ${sb()} + ${ss('"Hello, "')} + ${sb()} + ${ss('"!"')};\n};\nconsole.${sf('log')}(user.${sf('greet')}());`, guidance: ["A method is a function stored as a property of an object.", "Use <code>this.name</code> to access the object's name from inside the method.", "Fill in: <code>\"Hello, \"</code> and <code>this.name</code> (or the reverse order).", "Call it with <code>user.greet()</code> — <code>this</code> will be <code>user</code>."] },
+  { id: 6, title: "IIFE", topic: "execution", difficulty: "medium", desc: "Write an IIFE that runs immediately and logs a message.", code: `(${sv('function')}() {\n  console.${sf('log')}(${ss('"IIFE ran!"')});\n})${sb()}();`, guidance: ["IIFE = Immediately Invoked Function Expression.", "Wrap the function in parentheses: <code>(function() { ... })</code>.", "Add <code>()</code> at the end to invoke it right away.", "Useful to create a private scope and avoid polluting the global scope."] },
+  { id: 7, title: "Callback Function", topic: "execution", difficulty: "easy", desc: "Use setTimeout with a callback that runs after 1 second.", code: `console.${sf('log')}(${ss('"Start"')});\n${sf('setTimeout')}(${sv('function')}() {\n  console.${sf('log')}(${ss('"Done after 1s"')});\n}, ${sn('1000')});`, guidance: ["<code>setTimeout(callback, delayMs)</code> runs the callback later.", "The first argument is a function — that's your callback.", "The second argument is delay in milliseconds (1000 = 1 second).", "Callbacks are \"called back\" when an operation (e.g. timer) completes."] },
+  { id: 8, title: "Higher-Order Function", topic: "execution", difficulty: "medium", desc: "Write a HOF that takes a function and a number, and calls the function that many times.", code: `${sv('function')} ${sf('repeat')}(fn, times) {\n  ${sv('for')} (${sv('let')} i = ${sn('0')}; i < ${sb()}; i++) {\n    ${sb()}();\n  }\n}\n${sf('repeat')}(() => console.${sf('log')}(${ss('"Hi"')}), ${sn('3')});`, guidance: ["A HOF is a function that takes a function and/or returns a function.", "Fill in: <code>times</code> in the loop condition and <code>fn</code> inside the loop.", "Here <code>fn</code> is the callback; calling <code>fn()</code> runs it.", "<code>repeat</code> is the HOF; the arrow function is the callback."] },
+  { id: 9, title: "Recursive Function", topic: "execution", difficulty: "medium", desc: "Write a recursive function to compute factorial (n!).", code: `${sv('function')} ${sf('factorial')}(n) {\n  ${sv('if')} (n <= ${sn('1')}) ${sv('return')} ${sn('1')};\n\n  ${sv('return')} n * ${sf('factorial')}(${sb()});\n}\nconsole.${sf('log')}(${sf('factorial')}(${sn('5')})); ${sc('// 120')}`, guidance: ["Base case: when <code>n <= 1</code>, return 1 (0! and 1! are 1).", "Recursive case: <code>n * factorial(n - 1)</code>.", "The function calls itself with a smaller value until the base case.", "Ensure the base case is reached or you get infinite recursion (stack overflow)."] },
+  { id: 10, title: "Async/Await", topic: "execution", difficulty: "medium", desc: "Use async/await to wait for a Promise and log the result.", code: `${sv('async')} ${sv('function')} ${sf('fetchData')}() {\n  ${sv('const')} result = ${sv('await')} Promise.${sf('resolve')}(${ss('"Data loaded"')});\n  console.${sf('log')}(result);\n}\n${sf('fetchData')}();`, guidance: ["<code>async function</code> allows using <code>await</code> inside.", "<code>await</code> pauses until the Promise resolves and returns its value.", "Here <code>Promise.resolve(x)</code> creates an already-resolved promise.", "Async/await makes asynchronous code look synchronous and easier to read."] },
+  { id: 11, title: "Closure Basics", topic: "scope", difficulty: "medium", desc: "Create a function that returns another function that \"remembers\" a counter.", code: `${sv('function')} ${sf('makeCounter')}() {\n  ${sv('let')} count = ${sn('0')};\n\n  ${sv('return')} ${sv('function')}() {\n    count${sb()};\n    ${sv('return')} count;\n  };\n}\n${sv('const')} counter = ${sf('makeCounter')}();\nconsole.${sf('log')}(${sf('counter')}()); ${sc('// 1')}\nconsole.${sf('log')}(${sf('counter')}()); ${sc('// 2')}`, guidance: ["A closure is when an inner function keeps access to its outer scope.", "The inner function \"closes over\" the variable <code>count</code>.", "Use <code>count++</code> then <code>return count</code>.", "Each call to <code>makeCounter()</code> creates a new, independent counter."] },
+  { id: 12, title: "Hoisting", topic: "scope", difficulty: "easy", desc: "Call a function declaration before it appears in the code (demonstrate hoisting).", code: `${sf('sayHi')}(); ${sc('// Called before definition!')}\n${sv('function')} ${sf('sayHi')}() {\n  console.${sf('log')}(${ss('"Hi"')});\n}`, guidance: ["Function declarations are hoisted — the engine moves them to the top of their scope.", "So you can call <code>sayHi()</code> before the line where it's defined.", "Only declarations are hoisted; function expressions are not.", "This is why the call works: the declaration is effectively \"lifted\" up."] },
+  { id: 13, title: "Global vs Local Scope", topic: "scope", difficulty: "easy", desc: "Identify what logs: a global variable vs a local variable with the same name.", code: `${sv('let')} x = ${ss('"global"')};\n${sv('function')} ${sf('test')}() {\n  ${sv('let')} x = ${ss('"local"')};\n\n  console.${sf('log')}(x); ${sc('// ___')}\n}\n${sf('test')}();\nconsole.${sf('log')}(x); ${sc('// ___')}`, guidance: ["Inside <code>test()</code>, the local <code>x</code> shadows the global one.", "So the first <code>console.log(x)</code> prints <code>\"local\"</code>.", "The global <code>x</code> is unchanged; the second log prints <code>\"global\"</code>.", "Scope determines where a variable is visible; local wins over global when names match."] },
+  { id: 14, title: "Lexical Scope", topic: "scope", difficulty: "medium", desc: "Nested functions: inner function accesses outer function's variable (lexical environment).", code: `${sv('function')} ${sf('outer')}() {\n  ${sv('const')} msg = ${ss('"from outer"')};\n  ${sv('function')} ${sf('inner')}() {\n    console.${sf('log')}(msg);\n  }\n  ${sf('inner')}();\n}\n${sf('outer')}(); ${sc('// "from outer"')}`, guidance: ["Lexical scope = scope is determined by where the function is written in the code.", "Inner is defined inside outer, so it can \"see\" <code>msg</code>.", "When inner runs, it looks up <code>msg</code> in its lexical environment (outer's scope).", "The physical placement of the function in the source code defines its scope chain."] },
+  { id: 15, title: "this in Method", topic: "context", difficulty: "easy", desc: "Use this inside an object method to refer to the object.", code: `${sv('const')} obj = {\n  name: ${ss('"JS"')},\n  sayName: ${sv('function')}() {\n    console.${sf('log')}(${sv('this')}.name);\n  }\n};\nobj.${sf('sayName')}(); ${sc('// "JS"')}`, guidance: ["<code>this</code> refers to the object that is \"calling\" the method.", "When you call <code>obj.sayName()</code>, inside the method <code>this</code> is <code>obj</code>.", "So <code>this.name</code> is <code>obj.name</code> = <code>\"JS\"</code>.", "If you extract the method and call it alone, <code>this</code> can change (e.g. undefined in strict mode)."] },
+  { id: 16, title: ".call()", topic: "context", difficulty: "medium", desc: "Use .call() to invoke a function with a specific this and arguments.", code: `${sv('function')} ${sf('greet')}(greeting, punct) {\n  console.${sf('log')}(greeting + ${sv('this')}.name + punct);\n}\n${sv('const')} user = { name: ${ss('" Sam"')} };\n${sf('greet')}.${sf('call')}(${sb()}, ${ss('"Hello,"')}, ${ss('"!"')});`, guidance: ["<code>fn.call(thisArg, arg1, arg2, ...)</code> — first arg is <code>this</code>, rest are function args.", "Here <code>thisArg</code> is <code>user</code>, so inside greet, <code>this</code> is user.", "Fill in: <code>user</code> as the first argument to <code>.call()</code>.", "Output will be: Hello, Sam!"] },
+  { id: 17, title: ".apply()", topic: "context", difficulty: "medium", desc: "Use .apply() to invoke a function with this and arguments as an array.", code: `${sv('function')} ${sf('sum')}(a, b, c) {\n  console.${sf('log')}(a + b + c);\n}\n${sf('sum')}.${sf('apply')}(${sv('null')}, [${sn('1')}, ${sn('2')}, ${sn('3')}]); ${sc('// 6')}`, guidance: ["<code>fn.apply(thisArg, [arg1, arg2, ...])</code> — second arg is an array of arguments.", "Here we don't need a special <code>this</code>, so <code>null</code> is fine.", "The array <code>[1, 2, 3]</code> is \"spread\" as the three parameters a, b, c.", "Modern alternative: <code>sum(...[1,2,3])</code> with spread; <code>.call()</code> and <code>.apply()</code> are still used for setting <code>this</code>."] },
+  { id: 18, title: ".bind()", topic: "context", difficulty: "medium", desc: "Use .bind() to create a new function with this permanently set.", code: `${sv('const')} person = { name: ${ss('"Lee"')} };\n${sv('function')} ${sf('sayName')}() { console.${sf('log')}(this.name); }\n${sv('const')} boundFn = ${sf('sayName')}.${sf('bind')}(${sb()});\nboundFn(); ${sc('// "Lee"')}`, guidance: ["<code>fn.bind(thisArg)</code> returns a new function with <code>this</code> fixed to <code>thisArg</code>.", "Fill in: <code>person</code> so that when <code>boundFn</code> is called, <code>this</code> is person.", "Unlike <code>.call()</code> or <code>.apply()</code>, <code>.bind()</code> doesn't call the function — it returns a new function.", "Useful for callbacks where you need to preserve <code>this</code> (e.g. in event handlers)."] },
+  { id: 19, title: "Named Function Expression", topic: "definition", difficulty: "medium", desc: "Write a named function expression (function has a name for recursion/debugging).", code: `${sv('const')} ${sf('factorial')} = ${sv('function')} ${sf('fact')}(n) {\n  ${sv('if')} (n <= 1) ${sv('return')} 1;\n  ${sv('return')} n * ${sf('fact')}(n - 1);\n};\nconsole.${sf('log')}(${sf('factorial')}(${sn('4')})); ${sc('// 24')}`, guidance: ["The function has an internal name <code>fact</code> after <code>function</code>.", "The variable is <code>factorial</code>; the name <code>fact</code> is only visible inside the function.", "Useful for recursion: <code>fact(n-1)</code> calls itself by that internal name.", "Also helps in stack traces — the name appears in the debugger."] },
+  { id: 20, title: "this with .bind() in Callback", topic: "context", difficulty: "hard", desc: "Fix a lost-this problem: use .bind() so a method passed as callback keeps its this.", code: `${sv('const')} btn = { label: ${ss('"Click"')}, log() { console.${sf('log')}(this.label); } };\n${sf('setTimeout')}(btn.log.${sf('bind')}(${sb()}), 1000);`, guidance: ["When you pass <code>btn.log</code> to setTimeout, it's called later with <code>this</code> undefined (or global).", "Use <code>btn.log.bind(btn)</code> to create a new function with <code>this</code> fixed to <code>btn</code>.", "Fill in: <code>btn</code> so that when the callback runs, <code>this</code> is the button object.", "After 1 second, it will correctly log <code>\"Click\"</code>."] },
+  /* Definition & Syntax — 5 more */
+  { id: 21, title: "Arrow with Single Parameter", topic: "definition", difficulty: "easy", desc: "Use an arrow function with one parameter to square a number. (Single param can omit parentheses.)", code: `${sv('const')} square = ${sb()} => x * x;\nconsole.${sf('log')}(square(${sn('5')})); ${sc('// 25')}`, guidance: ["With one parameter you can write <code>x => ...</code> instead of <code>(x) => ...</code>.", "Fill in the parameter name: <code>x</code> (or any name).", "No <code>return</code> needed for a single expression.", "Multiple params or no params still need parentheses: <code>() => ...</code> or <code>(a, b) => ...</code>."] },
+  { id: 22, title: "Arrow in .filter()", topic: "definition", difficulty: "easy", desc: "Use an arrow function with .filter() to keep only numbers greater than 10.", code: `${sv('const')} nums = [${sn('5')}, ${sn('12')}, ${sn('8')}, ${sn('20')}];\n${sv('const')} big = nums.${sf('filter')}(${sb()} => n > 10);\nconsole.${sf('log')}(big); ${sc('// [12, 20]')}`, guidance: ["<code>.filter(callback)</code> keeps elements where the callback returns truthy.", "The callback receives each element — use one param e.g. <code>n</code>.", "Return a boolean: <code>n > 10</code>.", "Arrow form: <code>n => n > 10</code> is a common pattern."] },
+  { id: 23, title: "Method Shorthand (ES6)", topic: "definition", difficulty: "easy", desc: "Define a method using ES6 shorthand: name and parentheses only, no 'function' keyword.", code: `${sv('const')} calc = {\n  a: ${sn('3')},\n  b: ${sn('4')},\n  ${sb()}() { ${sv('return')} this.a + this.b; }\n};\nconsole.${sf('log')}(calc.${sf('add')}()); ${sc('// 7')}`, guidance: ["ES6 shorthand: <code>add() { ... }</code> instead of <code>add: function() { ... }</code>.", "The method name is <code>add</code>; fill in that identifier before the parentheses.", "Still use <code>this</code> to refer to the object.", "Shorthand is just syntactic sugar — behavior is the same as a regular method."] },
+  { id: 24, title: "Function Expression in .reduce()", topic: "definition", difficulty: "medium", desc: "Use .reduce() with a function expression to sum an array of numbers.", code: `${sv('const')} arr = [${sn('1')}, ${sn('2')}, ${sn('3')}, ${sn('4')}];\n${sv('const')} total = arr.${sf('reduce')}(${sv('function')}(acc, n) { ${sv('return')} ${sb()}; }, ${sn('0')});\nconsole.${sf('log')}(total); ${sc('// 10')}`, guidance: ["<code>.reduce(callback, initialValue)</code> — callback gets <code>(accumulator, current)</code>.", "Return the new accumulator each time: <code>acc + n</code>.", "First call: <code>acc</code> is 0 (initial), <code>n</code> is 1; then acc becomes 1, etc.", "The function has no name — it's an anonymous function expression."] },
+  { id: 25, title: "Function Returning a Function", topic: "definition", difficulty: "medium", desc: "Write a function that returns another function. The inner function should double its argument.", code: `${sv('function')} ${sf('makeMultiplier')}(factor) {\n  ${sv('return')} ${sv('function')}(x) { ${sv('return')} ${sb()}; };\n}\n${sv('const')} double = ${sf('makeMultiplier')}(${sn('2')});\nconsole.${sf('log')}(double(${sn('5')})); ${sc('// 10')}`, guidance: ["A function can return any value, including another function.", "Inner function has access to <code>factor</code> from the outer scope (closure).", "Fill in: <code>x * factor</code> (or <code>factor * x</code>).", "This pattern is the basis of higher-order functions and partial application."] },
+  /* Execution & Control Flow — 5 more */
+  { id: 26, title: "IIFE with Parameter", topic: "execution", difficulty: "medium", desc: "Write an IIFE that accepts a name and logs a greeting. Invoke it immediately with your name.", code: `(${sv('function')}(name) {\n  console.${sf('log')}(${ss('"Hello, "')} + name + ${ss('"!"')});\n})(${sb()});`, guidance: ["IIFEs can take arguments: <code>(function(name) { ... })(value)</code>.", "The value you pass is the argument to the function — e.g. a string like <code>\"World\"</code>.", "The parentheses around the function turn it into an expression; the trailing <code>(...)</code> invokes it.", "Useful for one-off setup with parameters without polluting the global scope."] },
+  { id: 27, title: "HOF That Returns a Function", topic: "execution", difficulty: "medium", desc: "Write a HOF that takes a multiplier and returns a function. The returned function multiplies its argument by that multiplier.", code: `${sv('function')} ${sf('multiplyBy')}(n) {\n  ${sv('return')} ${sv('function')}(x) { ${sv('return')} ${sb()} * ${sb()}; };\n}\n${sv('const')} triple = ${sf('multiplyBy')}(${sn('3')});\nconsole.${sf('log')}(triple(${sn('4')})); ${sc('// 12')}`, guidance: ["A HOF can return a function instead of (or in addition to) taking one.", "The inner function closes over <code>n</code>.", "Fill in: first blank <code>x</code>, second blank <code>n</code> (or the reverse: <code>n * x</code>).", "This is partial application: <code>multiplyBy(3)</code> \"fixes\" the first factor."] },
+  { id: 28, title: "Recursive Array Sum", topic: "execution", difficulty: "medium", desc: "Write a recursive function that returns the sum of all numbers in an array (without using loops).", code: `${sv('function')} ${sf('sumArr')}(arr) {\n  ${sv('if')} (arr.${sf('length')} === ${sn('0')}) ${sv('return')} ${sn('0')};\n  ${sv('return')} arr[${sn('0')}] + ${sf('sumArr')}(${sb()});\n}\nconsole.${sf('log')}(${sf('sumArr')}([${sn('1')}, ${sn('2')}, ${sn('3')}])); ${sc('// 6')}`, guidance: ["Base case: empty array → return 0.", "Recursive case: first element + sum of the rest.", "Use <code>arr.slice(1)</code> to get the array without the first element.", "So: <code>arr[0] + sumArr(arr.slice(1))</code>."] },
+  { id: 29, title: "Async/Await with Error Handling", topic: "execution", difficulty: "medium", desc: "Use async/await inside try/catch to handle a rejected Promise and log the error.", code: `${sv('async')} ${sv('function')} ${sf('risky')}() {\n  ${sv('try')} {\n    ${sv('await')} Promise.${sf('reject')}(${ss('"Oops"')});\n  } ${sv('catch')} (err) {\n    console.${sf('log')}(${sb()}); ${sc('// log the error')}\n  }\n}\n${sf('risky')}();`, guidance: ["<code>await</code> on a rejected Promise throws in the async function.", "Wrap in <code>try/catch</code> to handle the error; <code>catch (err)</code> receives it.", "Fill in: <code>err</code> (or use <code>err.message</code> if it's an Error).", "Without try/catch, the rejection becomes an unhandled promise rejection."] },
+  { id: 30, title: "Generator with yield", topic: "execution", difficulty: "hard", desc: "Write a generator function (function*) that yields 1, then 2, then 3. Use .next() to get the first value.", code: `${sv('function')} *${sf('gen')}() {\n  ${sv('yield')} ${sn('1')};\n  ${sv('yield')} ${sn('2')};\n  ${sv('yield')} ${sn('3')};\n}\n${sv('const')} g = ${sf('gen')}();\nconsole.${sf('log')}(g.${sf('next')}().value); ${sc('// 1')}`, guidance: ["Declare with <code>function* name()</code> — the asterisk makes it a generator.", "<code>yield</code> pauses the function and sends a value out; <code>.next()</code> resumes it.", "Calling <code>gen()</code> returns an iterator; <code>.next()</code> returns <code>{ value, done }</code>.", "Generators are useful for lazy sequences and custom iteration."] },
+  /* Scope & Memory — 5 more */
+  { id: 31, title: "Closure: Private Variable", topic: "scope", difficulty: "medium", desc: "Create a closure that holds a secret string. Return a function that returns that secret when called.", code: `${sv('function')} ${sf('createSecret')}(secret) {\n  ${sv('return')} ${sv('function')}() {\n    ${sv('return')} ${sb()};\n  };\n}\n${sv('const')} getSecret = ${sf('createSecret')}(${ss('"password123"')});\nconsole.${sf('log')}(getSecret()); ${sc('// "password123"')}`, guidance: ["The inner function closes over the parameter <code>secret</code>.", "Fill in: <code>secret</code> so the getter returns the value from the outer scope.", "Nothing else can access <code>secret</code> directly — it's effectively private.", "This pattern is used for encapsulation and module-like behavior."] },
+  { id: 32, title: "Block Scope with let", topic: "scope", difficulty: "easy", desc: "Use let inside a block {} and confirm the variable is not visible outside the block.", code: `{\n  ${sv('let')} blockOnly = ${ss('"inside"')};\n  console.${sf('log')}(blockOnly); ${sc('// "inside"')}\n}\nconsole.${sf('log')}(typeof ${sb()}); ${sc('// "undefined" — blockOnly not in scope')}`, guidance: ["<code>let</code> and <code>const</code> are block-scoped: they exist only inside the <code>{ }</code>.", "Outside the block, <code>blockOnly</code> doesn't exist.", "Fill in: <code>blockOnly</code> — <code>typeof</code> of an undeclared identifier is <code>\"undefined\"</code> (or it would throw in strict mode).", "With <code>var</code>, the variable would be function-scoped and could leak out."] },
+  { id: 33, title: "Closure in Loop (Fix)", topic: "scope", difficulty: "hard", desc: "Fix the classic loop bug: create 3 functions that log 0, 1, 2 (not 3, 3, 3). Use let in the loop.", code: `${sv('const')} fns = [];\n${sv('for')} (${sv('let')} i = ${sn('0')}; i < ${sn('3')}; i++) {\n  fns.${sf('push')}(() => console.${sf('log')}(${sb()}));\n}\nfns[${sn('0')}](); fns[${sn('1')}](); fns[${sn('2')}](); ${sc('// 0, 1, 2')}`, guidance: ["With <code>let</code>, each iteration has its own <code>i</code> (block scope).", "The arrow function closes over that per-iteration <code>i</code>.", "Fill in: <code>i</code> — each callback \"sees\" the correct value.", "With <code>var</code> you'd get 3, 3, 3 because there's only one shared <code>i</code>."] },
+  { id: 34, title: "Lexical Scope: Three Levels", topic: "scope", difficulty: "medium", desc: "Nest three functions. The innermost should log a variable from the outermost scope.", code: `${sv('function')} ${sf('level1')}() {\n  ${sv('const')} x = ${ss('"outer"')};\n  ${sv('function')} ${sf('level2')}() {\n    ${sv('function')} ${sf('level3')}() {\n      console.${sf('log')}(${sb()}); ${sc('// "outer"')}\n    }\n    ${sf('level3')}();\n  }\n  ${sf('level2')}();\n}\n${sf('level1')}();`, guidance: ["Lexical scope forms a chain: level3 → level2 → level1 → global.", "A function can access variables from any enclosing scope where it was defined.", "Fill in: <code>x</code> — level3 looks up <code>x</code> and finds it in level1.", "The scope is determined by where the function is written, not where it's called."] },
+  { id: 35, title: "Hoisting: Function vs Variable", topic: "scope", difficulty: "medium", desc: "Predict: a function declaration is hoisted; a variable with the same name assigned later — what gets called?", code: `${sf('what')}(); ${sc('// ___')}\n${sv('var')} what = ${sv('function')}() { console.${sf('log')}(${ss('"var"')}); };\n${sv('function')} ${sf('what')}() { console.${sf('log')}(${ss('"function"')}); }`, guidance: ["Function declarations are hoisted (and take precedence over variable with same name).", "So <code>what()</code> runs the function declaration: logs <code>\"function\"</code>.", "The <code>var what</code> is hoisted too but the assignment happens at runtime; the function body wins for the call.", "Avoid naming a variable the same as a function to prevent confusion."] },
+  /* Context & Binding — 5 more */
+  { id: 36, title: ".apply() to Find Max", topic: "context", difficulty: "medium", desc: "Use Math.max with .apply() to find the maximum value in an array (thisArg can be null).", code: `${sv('const')} nums = [${sn('4')}, ${sn('9')}, ${sn('2')}, ${sn('15')}];\n${sv('const')} max = Math.${sf('max')}.${sf('apply')}(${sb()}, nums);\nconsole.${sf('log')}(max); ${sc('// 15')}`, guidance: ["<code>Math.max(a, b, c, ...)</code> expects individual arguments, not an array.", "<code>.apply(thisArg, argsArray)</code> spreads the array as arguments.", "We don't need a specific <code>this</code> for Math.max, so use <code>null</code>.", "Modern alternative: <code>Math.max(...nums)</code> with spread."] },
+  { id: 37, title: ".bind() with Arguments", topic: "context", difficulty: "medium", desc: "Use .bind() to create a function that has both this and the first argument fixed (partial application).", code: `${sv('function')} ${sf('greet')}(greeting, name) {\n  return greeting + ${sv('this')}.title + ${ss('" "')} + name;\n}\n${sv('const')} obj = { title: ${ss('"Dr."')} };\n${sv('const')} sayHi = ${sf('greet')}.${sf('bind')}(obj, ${ss('"Hello, "')});\nconsole.${sf('log')}(sayHi(${ss('"Smith"')})); ${sc('// "Hello, Dr. Smith"')}`, guidance: ["<code>fn.bind(thisArg, arg1, arg2)</code> fixes <code>this</code> and optionally some arguments.", "Here <code>greet.bind(obj, \"Hello, \")</code> fixes <code>this</code> and the first parameter.", "Calling <code>sayHi(\"Smith\")</code> passes only the second argument (name).", "Useful for creating specialized functions from a general one."] },
+  { id: 38, title: "this in Nested Function", topic: "context", difficulty: "hard", desc: "Inside a method, a regular inner function loses 'this'. Store this in a variable (e.g. self) and use it inside the inner function.", code: `${sv('const')} obj = {\n  name: ${ss('"Outer"')},\n  run() {\n    ${sv('const')} self = ${sb()};\n    ${sv('function')} ${sf('inner')}() { console.${sf('log')}(self.name); }\n    ${sf('inner')}();\n  }\n};\nobj.${sf('run')}(); ${sc('// "Outer"')}`, guidance: ["Inside <code>run()</code>, <code>this</code> is <code>obj</code>.", "Inner functions (declared with <code>function</code>) don't inherit <code>this</code>.", "Save <code>this</code> in a variable: <code>const self = this;</code> (or <code>that</code>).", "Use <code>self</code> inside the inner function to refer to the object."] },
+  { id: 39, title: ".call() vs .apply()", topic: "context", difficulty: "easy", desc: "Invoke a function that takes (a, b, c) using .call() with three separate arguments, then using .apply() with one array.", code: `${sv('function')} ${sf('add3')}(a, b, c) { return a + b + c; }\n${sv('const')} args = [${sn('1')}, ${sn('2')}, ${sn('3')}];\nconsole.${sf('log')}(${sf('add3')}.${sf('call')}(${sv('null')}, ${sn('1')}, ${sn('2')}, ${sn('3')})); ${sc('// 6')}\nconsole.${sf('log')}(${sf('add3')}.${sf('apply')}(${sv('null')}, ${sb()})); ${sc('// 6')}`, guidance: ["<code>.call(null, 1, 2, 3)</code> — arguments listed individually.", "<code>.apply(null, array)</code> — arguments passed as a single array.", "Fill in: <code>args</code> so that <code>add3.apply(null, args)</code> spreads the array as a, b, c.", "Same result; use .apply when you have an array of arguments."] },
+  { id: 40, title: "Arrow Function and this", topic: "context", difficulty: "medium", desc: "Use an arrow function inside a method so that 'this' is inherited from the method (e.g. in a setTimeout callback).", code: `${sv('const')} timer = {\n  name: ${ss('"Timer"')},\n  start() {\n    ${sf('setTimeout')}(() => console.${sf('log')}(this.${sb()}), 100);\n  }\n};\ntimer.${sf('start')}(); ${sc('// "Timer"')}`, guidance: ["Arrow functions don't have their own <code>this</code> — they use the <code>this</code> from the enclosing scope.", "Here the arrow function is inside <code>start()</code>, so its <code>this</code> is the same as <code>start</code>'s (the timer object).", "Fill in: <code>name</code> to log <code>this.name</code> (i.e. \"Timer\").", "A regular <code>function() { ... }</code> would have lost <code>this</code> when called by setTimeout."] },
+  /* JavaScript Closures — 5 */
+  { id: 41, title: "Closure: Counter Factory", topic: "closures", difficulty: "easy", desc: "Write a function that returns a counter function. Each call to the counter increments and returns the count.", code: `${sv('function')} ${sf('createCounter')}() {\n  ${sv('let')} count = ${sn('0')};\n  ${sv('return')} ${sv('function')}() { count${sb()}; ${sv('return')} count; };\n}\n${sv('const')} c = ${sf('createCounter')}();\nconsole.${sf('log')}(c(), c(), c()); ${sc('// 1 2 3')}`, guidance: ["The inner function \"closes over\" <code>count</code> from the outer scope.", "Use <code>count++</code> then <code>return count</code>.", "Each call to <code>createCounter()</code> creates a new, independent counter.", "The closure keeps the variable alive as long as the returned function exists."] },
+  { id: 42, title: "Closure: Private State", topic: "closures", difficulty: "medium", desc: "Create a closure that stores a secret. Return an object with a getter that returns the secret.", code: `${sv('function')} ${sf('createSecret')}(secret) {\n  ${sv('return')} { getSecret: () => ${sb()} };\n}\n${sv('const')} box = ${sf('createSecret')}(${ss('"xyz"')});\nconsole.${sf('log')}(box.getSecret()); ${sc('// \"xyz\"')}`, guidance: ["The arrow function closes over the parameter <code>secret</code>.", "Fill in: <code>secret</code> so the getter returns the value.", "Nothing outside can access <code>secret</code> directly — encapsulation.", "This pattern is common for module-like private data."] },
+  { id: 43, title: "Closure: Multiplier Factory", topic: "closures", difficulty: "medium", desc: "Write a function that takes a factor and returns a function. The returned function multiplies its argument by that factor.", code: `${sv('function')} ${sf('multiplyBy')}(n) {\n  ${sv('return')} (x) => ${sb()} * ${sb()};\n}\n${sv('const')} double = ${sf('multiplyBy')}(${sn('2')});\nconsole.${sf('log')}(double(${sn('5')})); ${sc('// 10')}`, guidance: ["The inner function closes over <code>n</code>.", "Fill in: <code>x</code> and <code>n</code> (order doesn't matter for multiplication).", "This is partial application: <code>multiplyBy(2)</code> fixes the first factor.", "Each call to multiplyBy(n) creates a new closure with its own n."] },
+  { id: 44, title: "Closure: Loop and setTimeout", topic: "closures", difficulty: "hard", desc: "Create 3 timeouts that log 0, 1, 2 after 100ms each. Use let in the loop so each callback closes over the right value.", code: `${sv('for')} (${sv('let')} i = ${sn('0')}; i < ${sn('3')}; i++) {\n  ${sf('setTimeout')}(() => console.${sf('log')}(${sb()}), ${sn('100')});\n} ${sc('// 0, 1, 2')}`, guidance: ["With <code>let</code>, each iteration has its own <code>i</code> (block scope).", "The arrow function closes over that per-iteration <code>i</code>.", "Fill in: <code>i</code> so each timeout logs the correct value.", "With <code>var</code> you'd get 3, 3, 3 because there's one shared i."] },
+  { id: 45, title: "Closure: Memoization", topic: "closures", difficulty: "hard", desc: "Implement a simple memo: a function that caches the result of an expensive function and returns the cached value when called again with the same argument.", code: `${sv('function')} ${sf('memoize')}(fn) {\n  ${sv('const')} cache = {};\n  ${sv('return')} (key) => cache[key] ?? (cache[key] = ${sb()}(${sb()}));\n}\n${sv('const')} memoAdd = ${sf('memoize')}(x => x + ${sn('1')});\nconsole.${sf('log')}(memoAdd(${sn('5')}), memoAdd(${sn('5')})); ${sc('// 6 6 (second from cache)')}`, guidance: ["The returned function closes over <code>cache</code>.", "Use <code>??</code> to return cached value or compute and store: <code>fn(key)</code>.", "Fill in: <code>fn</code> and <code>key</code> so we call the original function and cache by key.", "Memoization avoids recomputing for the same inputs."] },
+  /* Short Circuiting Operators — 5 */
+  { id: 46, title: "&& short-circuit", topic: "shortCircuit", difficulty: "easy", desc: "Use && so that a message is logged only when a flag is true. If the flag is false, the right side is never evaluated.", code: `${sv('const')} debug = ${sv('true')};\n${sv('const')} msg = ${ss('"Debug info"')};\ndebug ${sb()} console.${sf('log')}(msg);`, guidance: ["<code>&&</code> short-circuits: if the left is falsy, the right is not evaluated.", "So <code>debug && console.log(msg)</code> logs only when debug is true.", "Fill in: <code>&&</code>.", "Common pattern for conditional execution without an if."] },
+  { id: 47, title: "|| default value", topic: "shortCircuit", difficulty: "easy", desc: "Use || to provide a default value when the left side is falsy (e.g. null or undefined).", code: `${sv('const')} name = ${sv('null')};\n${sv('const')} display = name ${sb()} ${ss('"Guest"')};\nconsole.${sf('log')}(display); ${sc('// \"Guest\"')}`, guidance: ["<code>||</code> returns the first truthy value, or the last if all are falsy.", "So <code>name || \"Guest\"</code> gives \"Guest\" when name is null/undefined/\"\".", "Fill in: <code>||</code>.", "Note: 0 and \"\" are falsy, so they get replaced too; use ?? for null/undefined only."] },
+  { id: 48, title: "?? nullish coalescing", topic: "shortCircuit", difficulty: "medium", desc: "Use ?? to provide a default only when the value is null or undefined (not for 0 or \"\").", code: `${sv('const')} count = ${sn('0')};\n${sv('const')} total = count ${sb()} ${sn('10')};\nconsole.${sf('log')}(total); ${sc('// 0 (not 10!)')}`, guidance: ["<code>??</code> returns the right side only when the left is <code>null</code> or <code>undefined</code>.", "So <code>count ?? 10</code> is 0 when count is 0 (0 is not nullish).", "Fill in: <code>??</code>.", "Use ?? instead of || when 0 or \"\" are valid values."] },
+  { id: 49, title: "Optional chaining ?.", topic: "shortCircuit", difficulty: "medium", desc: "Safely access a nested property that might be missing using optional chaining. Log undefined instead of throwing.", code: `${sv('const')} user = { name: ${ss('"Alex"')} };\nconsole.${sf('log')}(user.${sb()}.city); ${sc('// undefined (no address)')}\nconsole.${sf('log')}(user?.address?.city); ${sc('// undefined')}`, guidance: ["<code>?.</code> short-circuits: if the left is null/undefined, returns undefined.", "So <code>user?.address?.city</code> avoids error when address is missing.", "Fill in: <code>address?</code> or use <code>user?.address?.city</code> in the second log.", "Without ?., user.address would throw if address is undefined."] },
+  { id: 50, title: "&& and || together", topic: "shortCircuit", difficulty: "medium", desc: "Predict the result: use && and || in one expression (e.g. config.debug && log(config.msg) || \"no log\").", code: `${sv('const')} a = ${sv('null')};\n${sv('const')} b = ${ss('"fallback"')};\nconsole.${sf('log')}(a && ${ss('"x"')} ${sb()} b); ${sc('// \"fallback\"')}`, guidance: ["<code>a && \"x\"</code> is null (falsy), so the whole <code>(a && \"x\") || b</code> is b.", "Fill in: <code>||</code> so that when the left side is falsy, we get b.", "Operator precedence: && before ||, so it's (a && \"x\") || b.", "Short-circuiting means the right side of && isn't evaluated when a is falsy."] }
+];
+
+/* ─────────────────────────────────────────────
+   RENDER ENGINE + LOCALSTORAGE PERSISTENCE
+───────────────────────────────────────────── */
+const STORAGE_KEY = 'js-workout-solved';
+
+function loadSolvedFromStorage() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { ch1: [], ch2: [], ch3: [] };
+        const data = JSON.parse(raw);
+        return {
+            ch1: Array.isArray(data.ch1) ? data.ch1 : [],
+            ch2: Array.isArray(data.ch2) ? data.ch2 : [],
+            ch3: Array.isArray(data.ch3) ? data.ch3 : []
+        };
+    } catch (e) {
+        return { ch1: [], ch2: [], ch3: [] };
+    }
+}
+
+function saveSolvedToStorage() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            ch1: [...solvedIds.ch1],
+            ch2: [...solvedIds.ch2],
+            ch3: [...solvedIds.ch3]
+        }));
+    } catch (e) {}
+}
+
+const saved = loadSolvedFromStorage();
+const solvedIds = {
+    ch1: new Set(saved.ch1),
+    ch2: new Set(saved.ch2),
+    ch3: new Set(saved.ch3)
+};
+
+function dots(level) {
+    const m = {
+        easy: 1,
+        medium: 2,
+        hard: 3
+    };
+    return [1, 2, 3].map(
+        i => `<div class="dot ${
+            i <= m[level] ? 'lit ' + level : ''
+        }"></div>`
+    ).join('');
+}
+
+function renderCard(p, chapter, delay) {
+    const chKey = 'ch' + chapter;
+    return `
+  <div class="card" data-id="${
+        p.id
+    }" data-topic="${
+        p.topic
+    }" style="animation-delay:${delay}s">
+    <div class="card-header">
+      <span class="problem-num">#${
+        String(p.id).padStart(2, '0')
+    }</span>
+      <span class="problem-title">${
+        p.title
+    }</span>
+      <span class="topic-tag tag-${
+        p.topic
+    }">${
+        p.topic
+    }</span>
+    </div>
+    <div class="card-body">
+      <p class="problem-desc">${
+        p.desc
+    }</p>
+      <div class="code-block">${
+        p.code
+    }</div>
+      <button class="guidance-toggle" onclick="toggleG(this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        💡 Show Guidance
+      </button>
+      <div class="guidance-panel">
+        <ol>${
+        p.guidance.map(g => `<li>${g}</li>`).join('')
+    }</ol>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="difficulty">${
+        dots(p.difficulty)
+    }</div>
+      <button class="done-btn" onclick="toggleSolved(this,${
+        p.id
+    },'${chKey}')">
+        <span>✓</span> Mark as Solved
+      </button>
+    </div>
+  </div>`;
+}
+
+// Render chapters
+document.getElementById('ch1-grid').innerHTML = ch1.map((p, i) => renderCard(p, 1, i * 0.04)).join('');
+document.getElementById('ch2-grid').innerHTML = ch2.map((p, i) => renderCard(p, 2, i * 0.04)).join('');
+document.getElementById('ch3-grid').innerHTML = ch3.map((p, i) => renderCard(p, 3, i * 0.04)).join('');
+
+// Restore solved state from localStorage into the DOM
+function restoreSolvedUI() {
+    ['ch1', 'ch2', 'ch3'].forEach(function (chKey) {
+        var gridId = chKey + '-grid';
+        solvedIds[chKey].forEach(function (id) {
+            var card = document.querySelector('#' + gridId + ' .card[data-id="' + id + '"]');
+            if (card) {
+                card.classList.add('solved');
+                var btn = card.querySelector('.done-btn');
+                if (btn) {
+                    btn.classList.add('solved');
+                    btn.innerHTML = '<span>🎉</span> Solved!';
+                }
+            }
+        });
+    });
+}
+restoreSolvedUI();
+
+/* ─────────────────────────────────────────────
+   CHAPTER NAVIGATION (Ch2 locked until Ch1 all solved)
+───────────────────────────────────────────── */
+function updateChapter2Lock() {
+    const ch2Tab = document.querySelector('.ch-tab[data-chapter="2"]');
+    if (!ch2Tab) return;
+    const ch1Complete = ch1.filter(function (p) { return solvedIds.ch1.has(p.id); }).length >= ch1.length;
+    if (ch1Complete) {
+        ch2Tab.classList.remove('ch-tab-locked');
+        ch2Tab.classList.add('ch-tab-unlocked');
+        ch2Tab.setAttribute('aria-disabled', 'false');
+        ch2Tab.title = 'Control Statements';
+    } else {
+        ch2Tab.classList.add('ch-tab-locked');
+        ch2Tab.classList.remove('ch-tab-unlocked');
+        ch2Tab.setAttribute('aria-disabled', 'true');
+        ch2Tab.title = 'Complete all ' + ch1.length + ' Chapter 1 problems to unlock';
+    }
+}
+
+function updateChapter3Lock() {
+    const ch3Tab = document.querySelector('.ch-tab[data-chapter="3"]');
+    if (!ch3Tab) return;
+    const ch2Complete = ch2.filter(function (p) { return solvedIds.ch2.has(p.id); }).length >= ch2.length;
+    if (ch2Complete) {
+        ch3Tab.classList.remove('ch-tab-locked');
+        ch3Tab.classList.add('ch-tab-unlocked');
+        ch3Tab.setAttribute('aria-disabled', 'false');
+        ch3Tab.title = 'JS Functions';
+    } else {
+        ch3Tab.classList.add('ch-tab-locked');
+        ch3Tab.classList.remove('ch-tab-unlocked');
+        ch3Tab.setAttribute('aria-disabled', 'true');
+        ch3Tab.title = 'Complete all ' + ch2.length + ' Chapter 2 problems to unlock';
+    }
+}
+
+document.querySelectorAll('.ch-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const ch = btn.dataset.chapter;
+        if ((ch === '2' && btn.classList.contains('ch-tab-locked')) || (ch === '3' && btn.classList.contains('ch-tab-locked'))) return;
+        document.querySelectorAll('.ch-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.ch-section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('chapter-' + ch).classList.add('active');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+});
+updateChapter2Lock();
+updateChapter3Lock();
+
+/* ─────────────────────────────────────────────
+   FILTER BUTTONS
+───────────────────────────────────────────── */
+function renumberVisibleCh1Cards() {
+    const grid = document.getElementById('ch1-grid');
+    if (!grid) return;
+    const visible = grid.querySelectorAll('.card:not(.hidden)');
+    visible.forEach((card, index) => {
+        const numEl = card.querySelector('.problem-num');
+        if (numEl) numEl.textContent = '#' + String(index + 1).padStart(2, '0');
+    });
+}
+
+function renumberVisibleCh2Cards() {
+    const grid = document.getElementById('ch2-grid');
+    if (!grid) return;
+    const visible = grid.querySelectorAll('.card:not(.hidden)');
+    visible.forEach((card, index) => {
+        const numEl = card.querySelector('.problem-num');
+        if (numEl) numEl.textContent = '#' + String(index + 1).padStart(2, '0');
+    });
+}
+
+function renumberVisibleCh3Cards() {
+    const grid = document.getElementById('ch3-grid');
+    if (!grid) return;
+    const visible = grid.querySelectorAll('.card:not(.hidden)');
+    visible.forEach((card, index) => {
+        const numEl = card.querySelector('.problem-num');
+        if (numEl) numEl.textContent = '#' + String(index + 1).padStart(2, '0');
+    });
+}
+
+function setupFilter(barId, gridId, onFilter) {
+    document.querySelectorAll(`#${barId} .filter-btn`).forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll(`#${barId} .filter-btn`).forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const topic = btn.dataset.topic;
+            document.querySelectorAll(`#${gridId} .card`).forEach(card => {
+                card.classList.toggle('hidden', topic !== 'all' && card.dataset.topic !== topic);
+            });
+            if (typeof onFilter === 'function') onFilter();
+        });
+    });
+}
+setupFilter('ch1-filter-bar', 'ch1-grid', renumberVisibleCh1Cards);
+setupFilter('ch2-filter-bar', 'ch2-grid', renumberVisibleCh2Cards);
+setupFilter('ch3-filter-bar', 'ch3-grid', renumberVisibleCh3Cards);
+
+/* ─────────────────────────────────────────────
+   GUIDANCE TOGGLE
+───────────────────────────────────────────── */
+function toggleG(btn) {
+    const panel = btn.nextElementSibling;
+    btn.classList.toggle('open');
+    panel.classList.toggle('open');
+    btn.innerHTML = btn.classList.contains('open') ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg> 💡 Hide Guidance' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg> 💡 Show Guidance';
+}
+
+/* ─────────────────────────────────────────────
+   SOLVED TRACKING
+───────────────────────────────────────────── */
+function toggleSolved(btn, id, chKey) {
+    const card = btn.closest('.card');
+    const set = solvedIds[chKey];
+    if (set.has(id)) {
+        set.delete(id);
+        card.classList.remove('solved');
+        btn.classList.remove('solved');
+        btn.innerHTML = '<span>✓</span> Mark as Solved';
+    } else {
+        set.add(id);
+        card.classList.add('solved');
+        btn.classList.add('solved');
+        btn.innerHTML = '<span>🎉</span> Solved!';
+    }
+    updateProgress();
+    saveSolvedToStorage();
+}
+
+function updateProgress() {
+    // Count only solves for problems that still exist in this chapter (avoids "41/40" after removing problems)
+    const d1 = ch1.filter(function (p) { return solvedIds.ch1.has(p.id); }).length,
+        t1 = ch1.length;
+    const d2 = ch2.filter(function (p) { return solvedIds.ch2.has(p.id); }).length,
+        t2 = ch2.length;
+    const d3 = ch3.filter(function (p) { return solvedIds.ch3.has(p.id); }).length,
+        t3 = ch3.length;
+    document.getElementById('ch1-prog-text').textContent = `${d1} / ${t1} solved`;
+    document.getElementById('ch1-prog-fill').style.width = `${Math.min(1, d1 / t1) * 100}%`;
+    document.getElementById('ch2-prog-text').textContent = `${d2} / ${t2} solved`;
+    document.getElementById('ch2-prog-fill').style.width = `${Math.min(1, d2 / t2) * 100}%`;
+    document.getElementById('ch3-prog-text').textContent = `${d3} / ${t3} solved`;
+    document.getElementById('ch3-prog-fill').style.width = `${Math.min(1, d3 / t3) * 100}%`;
+    document.getElementById('total-count').textContent = d1 + d2 + d3;
+    updateChapter2Lock();
+    updateChapter3Lock();
+}
+
+// Initial sync after restoring solved state from localStorage
+updateProgress();
