@@ -107,6 +107,21 @@
     .card-body { padding: 18px 20px; }
     .problem-desc { font-size: 0.9rem; color: #c8c8d8; line-height: 1.65; margin-bottom: 14px; }
     .code-block { background: rgba(0,0,0,0.35); border: 1px solid #2a2a45; border-radius: 10px; padding: 14px 16px; font-family: 'Space Mono', monospace; font-size: 0.77rem; line-height: 1.75; color: #ccd6f6; margin-bottom: 14px; overflow-x: auto; white-space: pre; }
+    .sandbox-label { font-size: 0.75rem; font-weight: 600; color: #6b6b88; margin-bottom: 8px; display: block; }
+    .code-editor-wrap { margin-bottom: 10px; }
+    .code-editor { width: 100%; min-height: 120px; background: rgba(0,0,0,0.4); border: 1px solid #2a2a45; border-radius: 10px; padding: 12px 14px; font-family: 'Space Mono', monospace; font-size: 0.77rem; line-height: 1.6; color: #ccd6f6; resize: vertical; box-sizing: border-box; }
+    .code-editor:focus { outline: none; border-color: rgba(91,91,245,0.5); }
+    .code-editor::placeholder { color: #6b6b88; }
+    .code-output { background: rgba(0,0,0,0.5); border: 1px solid #2a2a45; border-radius: 8px; padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: 0.75rem; line-height: 1.5; color: #aab0c8; min-height: 36px; margin-bottom: 10px; white-space: pre-wrap; word-break: break-all; }
+    .code-output.empty { color: #6b6b88; }
+    .code-output.error { border-color: rgba(245,91,91,0.4); color: #f58b8b; }
+    .code-output.success { border-color: rgba(34,211,165,0.4); color: #22d3a5; }
+    .code-actions { display: flex; gap: 8px; margin-bottom: 12px; }
+    .run-btn, .submit-btn { border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 8px 14px; cursor: pointer; transition: all 0.2s; border: 1px solid #2a2a45; }
+    .run-btn { background: rgba(91,91,245,0.15); color: #8b8bf8; }
+    .run-btn:hover { background: rgba(91,91,245,0.25); border-color: #5b5bf5; }
+    .submit-btn { background: rgba(34,211,165,0.12); color: #22d3a5; }
+    .submit-btn:hover { background: rgba(34,211,165,0.22); border-color: #22d3a5; }
     .guidance-toggle { background: none; border: 1px solid #2a2a45; border-radius: 8px; color: #6b6b88; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 600; padding: 8px 14px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all 0.2s; width: 100%; margin-bottom: 10px; }
     .guidance-toggle:hover, .guidance-toggle.open { border-color: #5b5bf5; color: #5b5bf5; }
     .guidance-toggle svg { transition: transform 0.25s; flex-shrink: 0; }
@@ -126,7 +141,31 @@
     .ch-tab.ch-tab-unlocked .ch-lock-icon { display: none; }
     .chapter-nav { -ms-overflow-style: none; scrollbar-width: none; }
     .chapter-nav::-webkit-scrollbar { display: none; }
-    .progress-section { position: sticky; top: 4rem; z-index: 90; background: #0a0a12; padding-top: 12px; padding-bottom: 16px; margin-top: -12px; border-bottom: 1px solid #2a2a45; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .progress-section { position: sticky; top: 4rem; z-index: 90; background: #0a0a`12; padding-top: 12px; padding-bottom: 16px; margin-top: -12px; border-bottom: 1px solid #2a2a45; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .write-code-btn { width: 100%; margin-bottom: 12px; padding: 10px 16px; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; background: rgba(91,91,245,0.15); color: #8b8bf8; border: 1px solid rgba(91,91,245,0.4); transition: all 0.2s; }
+    .write-code-btn:hover { background: rgba(91,91,245,0.25); border-color: #5b5bf5; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+    .modal-overlay.modal-open { display: flex; }
+    .modal-box { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 16px; max-width: 640px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid #2a2a45; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-title { font-size: 1rem; font-weight: 700; color: #e8e8f0; margin: 0; }
+    .modal-close { background: none; border: none; color: #6b6b88; cursor: pointer; padding: 6px; line-height: 1; font-size: 1.25rem; border-radius: 6px; transition: color 0.2s; }
+    .modal-close:hover { color: #e8e8f0; }
+    .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .modal-desc { font-size: 0.9rem; color: #c8c8d8; line-height: 1.6; margin-bottom: 16px; }
+    .modal-guidance-title { font-size: 0.8rem; font-weight: 600; color: #6b6b88; margin-bottom: 8px; }
+    .modal-guidance ol { padding-left: 20px; margin: 0 0 16px 0; font-size: 0.84rem; color: #aab0c8; line-height: 1.6; }
+    .modal-guidance li { margin-bottom: 6px; }
+    .modal-guidance li strong { color: #2dd4bf; }
+    .modal-guidance li code { background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 4px; font-size: 0.77rem; color: #c3e88d; }
+    .modal-editor-wrap { margin-bottom: 10px; }
+    .modal-editor { width: 100%; min-height: 45vh; background: rgba(0,0,0,0.4); border: 1px solid #2a2a45; border-radius: 10px; padding: 12px 14px; font-family: 'Space Mono', monospace; font-size: 0.8rem; line-height: 1.6; color: #ccd6f6; resize: none; box-sizing: border-box; overflow-y: hidden; }
+    .modal-editor:focus { outline: none; border-color: rgba(91,91,245,0.5); }
+    .modal-output { background: rgba(0,0,0,0.5); border: 1px solid #2a2a45; border-radius: 8px; padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: 0.75rem; line-height: 1.5; color: #aab0c8; min-height: 44px; margin-bottom: 12px; white-space: pre-wrap; word-break: break-all; }
+    .modal-output.empty { color: #6b6b88; }
+    .modal-output.error { border-color: rgba(245,91,91,0.4); color: #f58b8b; }
+    .modal-output.success { border-color: rgba(34,211,165,0.4); color: #22d3a5; }
+    .modal-actions { display: flex; gap: 10px; }
     @media (max-width: 640px) {
       .site-header { padding-left: 14px; padding-right: 14px; }
       .hdr-div { margin-left: 10px; margin-right: 10px; }
@@ -162,6 +201,7 @@
   <!-- Chapter 1 -->
   <section class="ch-section active relative z-10" id="chapter-1">
     <div class="hero text-center py-12 px-5 pt-[50px] pb-8">
+      <img src="images/edure-logo-2.png" alt="Edure - AN ISO 9001:2015 CERTIFIED" class="mx-auto mb-6 max-h-24 w-auto object-contain" />
       <div class="badge inline-flex items-center gap-1.5 font-mono text-[0.68rem] py-1.5 px-3.5 rounded-full tracking-widest uppercase mb-4" style="background: rgba(91,91,245,0.12); border: 1px solid rgba(91,91,245,0.35); color: #5b5bf5;">📖 Chapter 01</div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-2.5" style="color: #e8e8f0;">JS <span class="hl" style="color: #5b5bf5;">Fundamentals</span></h1>
       <p class="subtitle text-base font-light max-w-[520px] mx-auto" style="color: #6b6b88;">50 problems covering variables, scope, operators, data types &amp; built-in functions.</p>
@@ -187,6 +227,7 @@
   <!-- Chapter 2 (same layout as Chapter 1: hero → filter bar → progress → grid) -->
   <section class="ch-section relative z-10" id="chapter-2">
     <div class="hero text-center py-12 px-5 pt-[50px] pb-8">
+      <img src="images/edure-logo-2.png" alt="Edure - AN ISO 9001:2015 CERTIFIED" class="mx-auto mb-6 max-h-24 w-auto object-contain" />
       <div class="badge inline-flex items-center gap-1.5 font-mono text-[0.68rem] py-1.5 px-3.5 rounded-full tracking-widest uppercase mb-4" style="background: rgba(91,91,245,0.12); border: 1px solid rgba(91,91,245,0.35); color: #5b5bf5;">📖 Chapter 02</div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-2.5" style="color: #e8e8f0;">Control <span class="hl" style="color: #5b5bf5;">Statements</span></h1>
       <p class="subtitle text-base font-light max-w-[520px] mx-auto" style="color: #6b6b88;">25 problems on if/else, ternary, switch, for, while, do-while, break &amp; continue.</p>
@@ -210,6 +251,7 @@
   <!-- Chapter 3: JS Functions -->
   <section class="ch-section relative z-10" id="chapter-3">
     <div class="hero text-center py-12 px-5 pt-[50px] pb-8">
+      <img src="images/edure-logo-2.png" alt="Edure - AN ISO 9001:2015 CERTIFIED" class="mx-auto mb-6 max-h-24 w-auto object-contain" />
       <div class="badge inline-flex items-center gap-1.5 font-mono text-[0.68rem] py-1.5 px-3.5 rounded-full tracking-widest uppercase mb-4" style="background: rgba(91,91,245,0.12); border: 1px solid rgba(91,91,245,0.35); color: #5b5bf5;">📖 Chapter 03</div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-2.5" style="color: #e8e8f0;">JS <span class="hl" style="color: #5b5bf5;">Functions</span></h1>
       <p class="subtitle text-base font-light max-w-[520px] mx-auto" style="color: #6b6b88;">50 problems on definition &amp; syntax, execution &amp; control flow, scope &amp; memory, context &amp; binding, closures, and short-circuiting operators.</p>
@@ -232,10 +274,36 @@
     <div class="problems-grid grid gap-5 max-w-[1300px] mx-auto px-5 pb-20 relative z-10" style="grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));" id="ch3-grid"></div>
   </section>
 
+  <!-- Code modal: question + suggestions + editor + run/submit -->
+  <div id="code-modal-overlay" class="modal-overlay" aria-hidden="true" onclick="if(event.target===this) closeCodeModal()">
+    <div class="modal-box" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title"></h2>
+        <button type="button" class="modal-close" onclick="closeCodeModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-desc" class="modal-desc"></p>
+        <div class="modal-guidance">
+          <div class="modal-guidance-title">💡 Suggestions</div>
+          <ol id="modal-guidance-list"></ol>
+        </div>
+        <div class="modal-editor-wrap">
+          <label for="modal-editor" class="sandbox-label">Write your code below (use console.log() for output)</label>
+          <textarea id="modal-editor" class="modal-editor" spellcheck="false" placeholder="// Your solution here"></textarea>
+        </div>
+        <div id="modal-output" class="modal-output empty" aria-live="polite"></div>
+        <div class="modal-actions">
+          <button type="button" class="run-btn" onclick="runCodeInModal()">Run</button>
+          <button type="button" class="submit-btn" onclick="submitCodeInModal()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="text-center py-7 text-muted text-[0.77rem] font-mono relative z-10 border-t border-border"><span class="text-accent">JS Workout Problems</span> &nbsp;·&nbsp; <span class="text-accent">Ch.1</span> JS Fundamentals &nbsp;·&nbsp; <span class="text-accent">Ch.2</span> Control Statements &nbsp;·&nbsp; <span class="text-accent">Ch.3</span> JS Functions</footer>
 
   <div id="outdated-warning" style="display:none; position:fixed; top:72px; left:50%; transform:translateX(-50%); z-index:999; background:#f55b5b; color:#fff; padding:10px 20px; border-radius:8px; font-size:0.85rem; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,0.3);">Outdated: only <span id="outdated-count">?</span> problems loaded. Hard refresh (Ctrl+Shift+R) to load all 25.</div>
-  <script src="app.js?v=27"></script>
+  <script src="app.js?v=29"></script>
   <script>
     (function() {
       if (typeof ch2 === 'undefined') return;

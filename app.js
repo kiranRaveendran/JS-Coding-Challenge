@@ -3097,6 +3097,7 @@ function renderCard(p, chapter, delay) {
       <div class="code-block">${
         p.code
     }</div>
+      <button type="button" class="write-code-btn" onclick="openCodeModal(this)" data-id="${p.id}" data-ch="${chapter}">✏️ Write code</button>
       <button class="guidance-toggle" onclick="toggleG(this)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         💡 Show Guidance
@@ -3118,6 +3119,157 @@ function renderCard(p, chapter, delay) {
       </button>
     </div>
   </div>`;
+}
+
+/* ─────────────────────────────────────────────
+   CODE SANDBOX — Run user code, capture console.log
+───────────────────────────────────────────── */
+function hasRealCode(code) {
+    var s = (code || '').trim();
+    if (!s) return false;
+    var lines = s.split('\n').map(function (line) { return line.trim(); }).filter(function (line) {
+        if (!line) return false;
+        var rest = line.replace(/^\s*\/\//, '').trim();
+        return rest.length > 0;
+    });
+    return lines.length > 0;
+}
+
+function runUserCode(code) {
+    var logs = [];
+    var fakeConsole = {
+        log: function () { logs.push(Array.prototype.slice.call(arguments).map(String).join(' ')); },
+        warn: function () { logs.push('warn: ' + Array.prototype.slice.call(arguments).map(String).join(' ')); },
+        error: function () { logs.push('error: ' + Array.prototype.slice.call(arguments).map(String).join(' ')); }
+    };
+    try {
+        var fn = new Function('console', code);
+        fn(fakeConsole);
+        return { success: true, output: logs.join('\n') || '(no output)' };
+    } catch (e) {
+        return { success: false, output: logs.join('\n'), error: e.message };
+    }
+}
+
+function getProblemById(chKey, id) {
+    var arr = chKey === 'ch1' ? ch1 : chKey === 'ch2' ? ch2 : ch3;
+    return arr.filter(function (p) { return p.id === id; })[0];
+}
+
+function openCodeModal(btn) {
+    var id = parseInt(btn.dataset.id, 10);
+    var ch = btn.dataset.ch;
+    var chKey = 'ch' + ch;
+    var p = getProblemById(chKey, id);
+    if (!p) return;
+
+    var overlay = document.getElementById('code-modal-overlay');
+    var titleEl = document.getElementById('modal-title');
+    var descEl = document.getElementById('modal-desc');
+    var listEl = document.getElementById('modal-guidance-list');
+    var editorEl = document.getElementById('modal-editor');
+    var outputEl = document.getElementById('modal-output');
+    if (!overlay || !titleEl || !descEl || !listEl || !editorEl || !outputEl) return;
+
+    titleEl.textContent = p.title;
+    descEl.textContent = p.desc;
+    listEl.innerHTML = p.guidance.map(function (g) { return '<li>' + g + '</li>'; }).join('');
+    editorEl.value = '';
+    outputEl.textContent = '';
+    outputEl.className = 'modal-output empty';
+
+    overlay.dataset.currentId = id;
+    overlay.dataset.currentCh = chKey;
+    overlay.classList.add('modal-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    resizeModalEditor();
+    if (!editorEl._resizeBound) {
+        editorEl.addEventListener('input', resizeModalEditor);
+        editorEl._resizeBound = true;
+    }
+    editorEl.focus();
+
+    var escHandler = function (e) {
+        if (e.key === 'Escape') { closeCodeModal(); document.removeEventListener('keydown', escHandler); }
+    };
+    document.addEventListener('keydown', escHandler);
+    overlay._escHandler = escHandler;
+}
+
+function resizeModalEditor() {
+    var el = document.getElementById('modal-editor');
+    if (!el) return;
+    var minH = window.innerHeight * 0.45;
+    var maxH = window.innerHeight * 0.75;
+    el.style.height = 'auto';
+    var h = Math.max(el.scrollHeight, minH);
+    el.style.height = Math.min(h, maxH) + 'px';
+    el.style.overflowY = h > maxH ? 'auto' : 'hidden';
+}
+
+function closeCodeModal() {
+    var overlay = document.getElementById('code-modal-overlay');
+    if (overlay) {
+        overlay.classList.remove('modal-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        if (overlay._escHandler) {
+            document.removeEventListener('keydown', overlay._escHandler);
+            overlay._escHandler = null;
+        }
+    }
+}
+
+function runCodeInModal() {
+    var editorEl = document.getElementById('modal-editor');
+    var outputEl = document.getElementById('modal-output');
+    if (!editorEl || !outputEl) return;
+    var result = runUserCode(editorEl.value.trim() || '// empty');
+    outputEl.textContent = result.output;
+    outputEl.classList.remove('empty', 'error', 'success');
+    if (result.success) {
+        outputEl.classList.add('success');
+    } else {
+        outputEl.textContent = (result.output ? result.output + '\n' : '') + 'Error: ' + result.error;
+        outputEl.classList.add('error');
+    }
+}
+
+function submitCodeInModal() {
+    var overlay = document.getElementById('code-modal-overlay');
+    var editorEl = document.getElementById('modal-editor');
+    var outputEl = document.getElementById('modal-output');
+    if (!overlay || !editorEl || !outputEl) return;
+    var id = parseInt(overlay.dataset.currentId, 10);
+    var chKey = overlay.dataset.currentCh;
+    if (!chKey || !solvedIds[chKey]) return;
+
+    var code = editorEl.value.trim();
+    if (!hasRealCode(code)) {
+        outputEl.textContent = 'Write some code and run it successfully before submitting.';
+        outputEl.classList.remove('empty', 'success');
+        outputEl.classList.add('error');
+        return;
+    }
+
+    var result = runUserCode(code);
+    outputEl.textContent = result.output;
+    outputEl.classList.remove('empty', 'error', 'success');
+
+    if (!result.success) {
+        outputEl.textContent = (result.output ? result.output + '\n' : '') + 'Error: ' + result.error;
+        outputEl.classList.add('error');
+        return;
+    }
+
+    outputEl.classList.add('success');
+    outputEl.textContent = result.output + '\n✓ Run successful!';
+    var grid = document.getElementById(chKey + '-grid');
+    var card = grid ? grid.querySelector('.card[data-id="' + id + '"]') : null;
+    var doneBtn = card ? card.querySelector('.done-btn') : null;
+    if (doneBtn && !solvedIds[chKey].has(id)) {
+        toggleSolved(doneBtn, id, chKey);
+    }
+    closeCodeModal();
 }
 
 // Render chapters
