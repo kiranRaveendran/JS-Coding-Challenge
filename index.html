@@ -39,6 +39,7 @@
     .header-row-1 { display: flex; align-items: center; min-height: 4rem; }
     .header-progress-bar { display: none; border-top: none; }
     .header-chapter-progress { display: none; }
+    .header-chapters-row { display: none; }
     body { padding-top: 4rem; }
     .progress-bar-footer { display: none !important; }
     .progress-section { position: sticky; top: 4rem; z-index: 90; background: #0a0a12; padding: 12px 20px 16px; margin: 0 auto 1.5rem; border-bottom: 1px solid #2a2a45; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
@@ -200,23 +201,52 @@
       .hdr-solved { font-size: 0.65rem; padding: 6px 10px; }
     }
     @media (max-width: 640px) {
-      .site-header { padding-left: 10px; padding-right: 10px; }
-      .header-row-1 { padding-left: 10px; padding-right: 10px; }
+      .site-header { padding-left: 10px; padding-right: 10px; flex-direction: column; align-items: stretch; }
+      .header-row-1 { padding-left: 10px; padding-right: 10px; flex-wrap: wrap; }
+      .header-row-1 .header-logo { flex: 1 1 auto; min-width: 0; }
+      .header-row-1 .logo-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .header-row-1 .hdr-div { display: none; }
+      .header-row-1 .chapter-nav-desktop { display: none !important; }
+      .header-row-1 .chapter-nav-mobile { display: block !important; flex: 1 1 auto; min-width: 0; max-width: 140px; }
+      .header-chapters-row { display: flex !important; gap: 8px; justify-content: center; align-items: center; padding: 8px 10px 10px; background: rgba(0,0,0,0.2); border-top: 1px solid #2a2a45; flex-wrap: wrap; }
+      .header-chapters-row .ch-tab { flex: 1 1 0; min-width: 60px; max-width: 80px; justify-content: center; }
       .hdr-div { margin-left: 6px; margin-right: 6px; }
       .ch-label { display: none; }
-      .chapter-nav-desktop { display: flex !important; }
-      .chapter-nav-mobile { display: none !important; }
       .ch-tab .ch-tab-text { display: none; }
       .ch-tab .ch-lock-icon { display: none; }
       .ch-tab { padding: 0.5rem 0.75rem; min-width: 44px; justify-content: center; }
       .ch-tab .ch-num { margin: 0; }
-      body { padding-top: 6rem; }
+      body { padding-top: 7rem; }
       .header-progress-bar { display: block !important; background: #12121e; padding: 8px 12px; border-top: none; }
       .header-progress-bar .hdr-solved { margin: 0; width: 100%; text-align: center; border: none; background: transparent; }
       .hdr-solved-in-row { display: none !important; }
-      .progress-section { padding: 10px 14px 12px; }
+      .progress-section { padding: 10px 14px 12px; top: 7rem; position: sticky; z-index: 90; background: #0a0a12; }
       .progress-section .progress-label { font-size: 0.72rem; }
       .problems-grid { padding-left: 12px; padding-right: 12px; }
+    }
+    /* Below 600px: row 1 = logo + title + 01|02|03, row 2 = Total solved bar (like screenshot) */
+    @media (max-width: 600px) {
+      .site-header { flex-direction: column; align-items: stretch; flex-wrap: nowrap; padding-left: 10px; padding-right: 10px; padding-bottom: 0; }
+      .header-row-1 { flex-wrap: nowrap; padding-left: 0; padding-right: 0; padding-top: 10px; padding-bottom: 10px; gap: 10px; min-height: 3.5rem; }
+      .header-row-1 .header-logo { flex: 0 0 auto; min-width: 0; }
+      .header-row-1 .logo-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; }
+      .header-row-1 .logo-icon { width: 36px; height: 36px; font-size: 0.75rem; }
+      .header-row-1 .chapter-nav-desktop { display: flex !important; flex: 0 0 auto; gap: 6px; min-width: 0; }
+      .header-row-1 .chapter-nav-mobile { display: none !important; }
+      .header-chapters-row { display: none !important; }
+      .header-row-1 .hdr-solved-in-row { display: none !important; }
+      .site-header .ch-label { display: none; }
+      .site-header .ch-tab { padding: 0.4rem 0.65rem; min-width: 40px; justify-content: center; font-size: 0.8rem; }
+      .site-header .ch-tab .ch-num { margin: 0; background: transparent; padding: 0; font-size: 0.8rem; }
+      .site-header .ch-tab .ch-tab-text { display: none; }
+      .site-header .ch-tab .ch-lock-icon { display: none; }
+      .site-header .ch-tab:not(.active) { background: rgba(26,26,46,0.9); color: #6b6b88; border-color: #3a3a55; }
+      .site-header .ch-tab.active { background: #5b5bf5; border-color: #5b5bf5; color: #fff; }
+      .header-progress-bar { display: flex !important; align-items: center; justify-content: center; width: 100%; padding: 10px 14px; margin: 0 0 10px 0; background: transparent; border: 1px solid #3a3a55; border-radius: 12px; }
+      .header-progress-bar .hdr-solved { margin: 0; padding: 0; width: auto; text-align: center; border: none; background: transparent; font-size: 0.8rem; color: #6b6b88; }
+      .header-progress-bar .hdr-solved .text-accent { color: #5b5bf5; font-weight: 700; }
+      body { padding-top: 6.5rem; }
+      .progress-section { top: 6.5rem; position: sticky; z-index: 90; background: #0a0a12; }
     }
   </style> 
 </head>
@@ -248,6 +278,17 @@
         <option value="3" disabled>Ch.3 Functions (unlock after Ch.2)</option>
       </select>
       <div class="hdr-solved hdr-solved-in-row ml-auto shrink-0 font-mono text-[0.7rem] text-muted bg-surface border border-border rounded-lg py-1.5 px-3 whitespace-nowrap">Total solved: <span id="total-count" class="text-accent font-bold">0</span></div>
+    </div>
+    <div class="header-chapters-row" id="header-chapters-row">
+      <button type="button" class="ch-tab ch-tab-mobile active flex items-center justify-center border border-border rounded-[10px] font-outfit text-[0.82rem] font-semibold py-2 px-3 cursor-pointer transition-all" data-chapter="1">
+        <span class="ch-num font-mono text-[0.8rem]">01</span>
+      </button>
+      <button type="button" class="ch-tab ch-tab-mobile ch-tab-locked flex items-center justify-center bg-transparent border border-border rounded-[10px] text-muted font-outfit text-[0.82rem] font-semibold py-2 px-3 transition-all" data-chapter="2" title="Complete Chapter 1 to unlock" aria-disabled="true">
+        <span class="ch-num font-mono text-[0.8rem]">02</span>
+      </button>
+      <button type="button" class="ch-tab ch-tab-mobile ch-tab-locked flex items-center justify-center bg-transparent border border-border rounded-[10px] text-muted font-outfit text-[0.82rem] font-semibold py-2 px-3 transition-all" data-chapter="3" title="Complete Chapter 2 to unlock" aria-disabled="true">
+        <span class="ch-num font-mono text-[0.8rem]">03</span>
+      </button>
     </div>
     <div class="header-progress-bar" aria-hidden="true">
       <div class="hdr-solved font-mono text-[0.75rem] text-muted">Total solved: <span id="total-count-mobile" class="text-accent font-bold">0</span></div>

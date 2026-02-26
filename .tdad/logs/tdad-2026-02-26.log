@@ -1,0 +1,24 @@
+
+================================================================================
+TDAD Session Started: 2026-02-26T18:43:08.392Z
+================================================================================
+[2026-02-26T18:43:33.117Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-02-26T18:43:33.118Z] [EXTENSION] 📁 Log file location: f:\Personal\Edure\Javascript\Tasks\Coding Challenges\.tdad\logs\tdad-2026-02-26.log
+[2026-02-26T18:43:33.118Z] [EXTENSION] 📊 Workspace folders: f:\Personal\Edure\Javascript\Tasks\Coding Challenges
+[2026-02-26T18:43:33.119Z] [EXTENSION] Creating WorkflowController...
+[2026-02-26T18:43:33.120Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-02-26T18:43:33.124Z] [EXTENSION] TDAD Extension activated successfully
+[2026-02-26T18:43:33.126Z] [EXTENSION] Registering commands...
+[2026-02-26T18:43:34.600Z] [EXTENSION] FeedbackManager: Session 2
+[2026-02-26T18:43:34.618Z] [EXTENSION] TDAD structure already initialized
+[2026-02-26T18:43:34.619Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-02-26T18:43:34.623Z] [CANVAS] Created directory: f:\Personal\Edure\Javascript\Tasks\Coding Challenges\.tdad\workflows
+[2026-02-26T18:43:34.626Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-02-26T18:43:34.628Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-02-26T18:43:34.631Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-02-26T18:43:38.268Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-02-26T18:43:38.270Z] [CANVAS] MVP: Canvas initialized with simple JSON storage
+[2026-02-26T18:43:38.483Z] [CANVAS] [FitView] isLoading=true, nodes.length=0, folderId=null
+[2026-02-26T18:43:38.875Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-02-26T18:43:38.915Z] [CANVAS] [FitView] isLoading=false, nodes.length=0, folderId=null

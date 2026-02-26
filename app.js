@@ -3545,51 +3545,62 @@ restoreSolvedUI();
    CHAPTER NAVIGATION (Ch2 locked until Ch1 all solved)
 ───────────────────────────────────────────── */
 function updateChapter2Lock() {
-    const ch2Tab = document.querySelector('.ch-tab[data-chapter="2"]');
+    const ch2Tabs = document.querySelectorAll('.ch-tab[data-chapter="2"]');
     const opt2 = document.querySelector('#chapter-select-mobile option[value="2"]');
-    if (!ch2Tab) return;
+    if (!ch2Tabs.length) return;
     const ch1Complete = ch1.filter(function (p) { return solvedIds.ch1.has(p.id); }).length >= ch1.length;
-    if (ch1Complete) {
-        ch2Tab.classList.remove('ch-tab-locked');
-        ch2Tab.classList.add('ch-tab-unlocked');
-        ch2Tab.setAttribute('aria-disabled', 'false');
-        ch2Tab.title = 'Control Statements';
-        if (opt2) { opt2.disabled = false; opt2.textContent = 'Ch.2 Control Statements'; }
-    } else {
-        ch2Tab.classList.add('ch-tab-locked');
-        ch2Tab.classList.remove('ch-tab-unlocked');
-        ch2Tab.setAttribute('aria-disabled', 'true');
-        ch2Tab.title = 'Complete all ' + ch1.length + ' Chapter 1 problems to unlock';
-        if (opt2) { opt2.disabled = true; opt2.textContent = 'Ch.2 Control (unlock after Ch.1)'; }
+    const unlocked = ch1Complete;
+    ch2Tabs.forEach(function (ch2Tab) {
+        if (unlocked) {
+            ch2Tab.classList.remove('ch-tab-locked');
+            ch2Tab.classList.add('ch-tab-unlocked');
+            ch2Tab.setAttribute('aria-disabled', 'false');
+            ch2Tab.title = 'Control Statements';
+        } else {
+            ch2Tab.classList.add('ch-tab-locked');
+            ch2Tab.classList.remove('ch-tab-unlocked');
+            ch2Tab.setAttribute('aria-disabled', 'true');
+            ch2Tab.title = 'Complete all ' + ch1.length + ' Chapter 1 problems to unlock';
+        }
+    });
+    if (opt2) {
+        if (unlocked) { opt2.disabled = false; opt2.textContent = 'Ch.2 Control Statements'; }
+        else { opt2.disabled = true; opt2.textContent = 'Ch.2 Control (unlock after Ch.1)'; }
     }
 }
 
 function updateChapter3Lock() {
-    const ch3Tab = document.querySelector('.ch-tab[data-chapter="3"]');
+    const ch3Tabs = document.querySelectorAll('.ch-tab[data-chapter="3"]');
     const opt3 = document.querySelector('#chapter-select-mobile option[value="3"]');
-    if (!ch3Tab) return;
+    if (!ch3Tabs.length) return;
     const ch2Complete = ch2.filter(function (p) { return solvedIds.ch2.has(p.id); }).length >= ch2.length;
-    if (ch2Complete) {
-        ch3Tab.classList.remove('ch-tab-locked');
-        ch3Tab.classList.add('ch-tab-unlocked');
-        ch3Tab.setAttribute('aria-disabled', 'false');
-        ch3Tab.title = 'JS Functions';
-        if (opt3) { opt3.disabled = false; opt3.textContent = 'Ch.3 JS Functions'; }
-    } else {
-        ch3Tab.classList.add('ch-tab-locked');
-        ch3Tab.classList.remove('ch-tab-unlocked');
-        ch3Tab.setAttribute('aria-disabled', 'true');
-        ch3Tab.title = 'Complete all ' + ch2.length + ' Chapter 2 problems to unlock';
-        if (opt3) { opt3.disabled = true; opt3.textContent = 'Ch.3 Functions (unlock after Ch.2)'; }
+    const unlocked = ch2Complete;
+    ch3Tabs.forEach(function (ch3Tab) {
+        if (unlocked) {
+            ch3Tab.classList.remove('ch-tab-locked');
+            ch3Tab.classList.add('ch-tab-unlocked');
+            ch3Tab.setAttribute('aria-disabled', 'false');
+            ch3Tab.title = 'JS Functions';
+        } else {
+            ch3Tab.classList.add('ch-tab-locked');
+            ch3Tab.classList.remove('ch-tab-unlocked');
+            ch3Tab.setAttribute('aria-disabled', 'true');
+            ch3Tab.title = 'Complete all ' + ch2.length + ' Chapter 2 problems to unlock';
+        }
+    });
+    if (opt3) {
+        if (unlocked) { opt3.disabled = false; opt3.textContent = 'Ch.3 JS Functions'; }
+        else { opt3.disabled = true; opt3.textContent = 'Ch.3 Functions (unlock after Ch.2)'; }
     }
 }
 
 function switchToChapter(ch) {
-    const btn = document.querySelector('.ch-tab[data-chapter="' + ch + '"]');
-    if (btn && ((ch === '2' && btn.classList.contains('ch-tab-locked')) || (ch === '3' && btn.classList.contains('ch-tab-locked')))) return;
+    const btns = document.querySelectorAll('.ch-tab[data-chapter="' + ch + '"]');
+    const first = btns[0];
+    if (first && ((ch === '2' && first.classList.contains('ch-tab-locked')) || (ch === '3' && first.classList.contains('ch-tab-locked')))) return;
     document.querySelectorAll('.ch-tab').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.ch-section').forEach(s => s.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    btns.forEach(function (b) { b.classList.add('active'); });
     const section = document.getElementById('chapter-' + ch);
     if (section) section.classList.add('active');
     const mobileSelect = document.getElementById('chapter-select-mobile');
