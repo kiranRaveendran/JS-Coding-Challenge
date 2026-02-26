@@ -2954,7 +2954,252 @@ console.${
             sc('// 7')
         }`,
         guidance: ["<code>x % 7</code> is the remainder when x is divided by 7", "Loop while the remainder is not 0 (not divisible)", "Increment <code>x++</code> until we hit 7", "7 % 7 === 0, so we stop and log 7"]
-    }
+    },
+
+    /* Chapter 2 — Number and Basic math logic (5 problems) */
+    { id: 26, title: "Sum of Two Numbers", topic: "number", difficulty: "easy",
+        desc: "Store two numbers in variables and log their sum.",
+        code: `${sv('let')} a = ${sb()}, b = ${sb()};\nconsole.${sf('log')}(a + b); ${sc('// e.g. 3 + 5 => 8')}`,
+        guidance: ["Assign numeric values (no quotes): e.g. <code>3</code> and <code>5</code>.", "The <code>+</code> operator adds numbers.", "If you use quotes, they become strings and + concatenates instead."] },
+    { id: 27, title: "Even or Odd", topic: "number", difficulty: "easy",
+        desc: "Given a number n, log whether it is 'even' or 'odd' using the remainder operator %.",
+        code: `${sv('let')} n = ${sb()};\n${sv('if')} (n % ${sn('2')} === ${sn('0')}) console.${sf('log')}(${ss('"even"')});\n${sv('else')} console.${sf('log')}(${ss('"odd"')});`,
+        guidance: ["<code>n % 2</code> is 0 when n is even, 1 when n is odd.", "Use <code>if (n % 2 === 0)</code> for even; else odd.", "Try with different values of n."] },
+    { id: 28, title: "Max of Two", topic: "number", difficulty: "easy",
+        desc: "Given two numbers, log the larger one. Use an if/else (no Math.max).",
+        code: `${sv('let')} x = ${sb()}, y = ${sb()};\n${sv('if')} (x >= y) console.${sf('log')}(x);\n${sv('else')} console.${sf('log')}(y);`,
+        guidance: ["Compare with <code>>=</code> or <code>></code>.", "If x is greater or equal, log x; otherwise log y.", "Handles the case when both are equal."] },
+    { id: 29, title: "Integer Division and Remainder", topic: "number", difficulty: "easy",
+        desc: "For 17 and 5: log how many times 5 fits (quotient) and the remainder.",
+        code: `${sv('let')} num = ${sn('17')}, div = ${sn('5')};\n${sv('let')} quotient = ${sb()}; ${sc('// 3')}\n${sv('let')} remainder = num % div; ${sc('// 2')}\nconsole.${sf('log')}(quotient, remainder);`,
+        guidance: ["Quotient = integer division: <code>Math.floor(num / div)</code> or <code>num / div</code> with truncation.", "Remainder = <code>num % div</code>.", "17 / 5 = 3.4 → quotient 3; 17 % 5 = 2."] },
+    { id: 30, title: "Average of Three", topic: "number", difficulty: "easy",
+        desc: "Compute and log the average of three numbers (sum divided by 3).",
+        code: `${sv('let')} p = ${sb()}, q = ${sb()}, r = ${sb()};\n${sv('let')} avg = (p + q + r) / ${sn('3')};\nconsole.${sf('log')}(avg);`,
+        guidance: ["Sum = <code>p + q + r</code>; average = sum / 3.", "Division in JS gives a number (possibly decimal).", "Example: 10, 20, 30 → average 20."] },
+    /* Number & Math — 5 advanced */
+    { id: 31, title: "Sum of Digits", topic: "number", difficulty: "medium",
+        desc: "Given a positive integer n, compute and log the sum of its digits (e.g. 123 → 6). Use a loop.",
+        code: `${sv('let')} n = ${sb()}; ${sc('// e.g. 123')}\n${sv('let')} sum = ${sn('0')};\n${sv('while')} (n > ${sn('0')}) {\n  sum += n % ${sn('10')};\n  n = ${sb()};\n}\nconsole.${sf('log')}(sum);`,
+        guidance: ["<code>n % 10</code> gives the last digit.", "Integer division by 10: <code>Math.floor(n / 10)</code> to remove the last digit.", "Loop until n becomes 0."] },
+    { id: 32, title: "Check Prime", topic: "number", difficulty: "medium",
+        desc: "Check if a number n is prime (only divisible by 1 and itself). Log true or false. Use a loop.",
+        code: `${sv('let')} n = ${sb()};\n${sv('if')} (n < ${sn('2')}) { console.${sf('log')}(${sv('false')}); }\n${sv('else')} {\n  ${sv('let')} prime = ${sv('true')};\n  ${sv('for')} (${sv('let')} i = ${sn('2')}; i <= ${sb()}; i++) {\n    ${sv('if')} (n % i === ${sn('0')}) { prime = ${sv('false')}; ${sv('break')}; }\n  }\n  console.${sf('log')}(prime);\n}`,
+        guidance: ["Check divisors from 2 up to <code>Math.sqrt(n)</code> (or n-1).", "If any i divides n (<code>n % i === 0</code>), n is not prime.", "Optimization: only need to check up to sqrt(n)."] },
+    { id: 33, title: "Power Without Math.pow", topic: "number", difficulty: "medium",
+        desc: "Compute base^exp (e.g. 2^5 = 32) using a loop. Assume exp is a non-negative integer.",
+        code: `${sv('let')} base = ${sb()}, exp = ${sb()};\n${sv('let')} result = ${sn('1')};\n${sv('for')} (${sv('let')} i = ${sn('0')}; i < exp; i++) result ${sb()};\nconsole.${sf('log')}(result);`,
+        guidance: ["Start result = 1. Multiply by base in the loop exp times.", "Fill in: <code>*= base</code> (or <code>result = result * base</code>).", "Handle exp === 0: loop doesn't run, result stays 1."] },
+    { id: 34, title: "GCD (Euclidean Algorithm)", topic: "number", difficulty: "hard",
+        desc: "Find the greatest common divisor of two positive integers a and b using the Euclidean algorithm.",
+        code: `${sv('let')} a = ${sb()}, b = ${sb()};\n${sv('while')} (b !== ${sn('0')}) {\n  ${sv('let')} temp = b;\n  b = a % b;\n  a = ${sb()};\n}\nconsole.${sf('log')}(a); ${sc('// GCD')}`,
+        guidance: ["Euclidean algorithm: GCD(a,b) = GCD(b, a % b) until b is 0.", "Store b in temp, then set b = a % b, a = temp (old b).", "When b becomes 0, a holds the GCD."] },
+    { id: 35, title: "Count Divisors", topic: "number", difficulty: "medium",
+        desc: "Given a positive integer n, count how many integers from 1 to n divide n evenly. Log the count.",
+        code: `${sv('let')} n = ${sb()};\n${sv('let')} count = ${sn('0')};\n${sv('for')} (${sv('let')} i = ${sn('1')}; i <= n; i++) {\n  ${sv('if')} (${sb()} === ${sn('0')}) count++;\n}\nconsole.${sf('log')}(count);`,
+        guidance: ["Loop i from 1 to n. If <code>n % i === 0</code>, i is a divisor.", "Increment count when the condition is true.", "Example: 6 has divisors 1,2,3,6 → count 4."] },
+
+    /* Chapter 2 — Strings Mastery (10 problems) */
+    { id: 36, title: "String Length and Index", topic: "strings", difficulty: "easy",
+        desc: "Store a string in a variable, then log its length and the first character.",
+        code: `${sv('let')} str = ${sb()};\nconsole.${sf('log')}(str.${sf('length')});\nconsole.${sf('log')}(str[${sn('0')}] ${sv('||')} str.${sf('charAt')}(${sn('0')}));`,
+        guidance: ["<code>.length</code> gives the number of characters.", "First character: <code>str[0]</code> or <code>str.charAt(0)</code>.", "Indices are 0-based."] },
+    { id: 37, title: "toUpperCase and toLowerCase", topic: "strings", difficulty: "easy",
+        desc: "Take a string and log it in all uppercase, then in all lowercase.",
+        code: `${sv('let')} s = ${sb()};\nconsole.${sf('log')}(s.${sf('toUpperCase')}());\nconsole.${sf('log')}(s.${sf('toLowerCase')}());`,
+        guidance: ["<code>.toUpperCase()</code> and <code>.toLowerCase()</code> return new strings; they don't modify the original.", "These methods don't take arguments."] },
+    { id: 38, title: "Slice and Substring", topic: "strings", difficulty: "easy",
+        desc: "Given a string, log the slice from index 2 to 5 (exclusive end) and from index 1 to end.",
+        code: `${sv('let')} text = ${sb()};\nconsole.${sf('log')}(text.${sf('slice')}(${sn('2')}, ${sn('5')}));\nconsole.${sf('log')}(text.${sf('slice')}(${sn('1')}));`,
+        guidance: ["<code>slice(start, end)</code> — characters from start up to but not including end.", "<code>slice(1)</code> with one argument gives from index 1 to the end.", "Example: 'hello' → slice(2,5) is 'ell', slice(1) is 'ello'."] },
+    { id: 39, title: "indexOf and includes", topic: "strings", difficulty: "easy",
+        desc: "Check if a string contains a substring; if yes, log its starting index, otherwise log -1.",
+        code: `${sv('let')} str = ${sb()}, sub = ${sb()};\n${sv('let')} idx = str.${sf('indexOf')}(sub);\nconsole.${sf('log')}(str.${sf('includes')}(sub) ? idx : ${sn('-1')});`,
+        guidance: ["<code>indexOf(sub)</code> returns the first index where sub is found, or -1.", "<code>includes(sub)</code> returns true/false.", "Use indexOf and handle -1 for 'not found'."] },
+    { id: 40, title: "trim and repeat", topic: "strings", difficulty: "easy",
+        desc: "Take a string with leading/trailing spaces, trim it, then log it repeated 3 times (no spaces between).",
+        code: `${sv('let')} s = ${sb()};\n${sv('let')} t = s.${sf('trim')}();\nconsole.${sf('log')}(t.${sf('repeat')}(${sn('3')}));`,
+        guidance: ["<code>.trim()</code> removes whitespace from both ends.", "<code>.repeat(n)</code> returns the string concatenated n times.", "Example: '  hi  '.trim().repeat(3) → 'hihihi'."] },
+    { id: 41, title: "Replace First Occurrence", topic: "strings", difficulty: "easy",
+        desc: "Replace the first occurrence of a substring with another string and log the result.",
+        code: `${sv('let')} str = ${sb()}, oldStr = ${sb()}, newStr = ${sb()};\nconsole.${sf('log')}(str.${sf('replace')}(${sb()}, newStr));`,
+        guidance: ["<code>replace(search, replacement)</code> replaces only the first match by default.", "First argument to replace: the substring to find (e.g. oldStr).", "Returns a new string; original is unchanged."] },
+    { id: 42, title: "Split and Join", topic: "strings", difficulty: "medium",
+        desc: "Split a comma-separated string into an array, then join the array back with a different delimiter.",
+        code: `${sv('let')} csv = ${sb()};\n${sv('let')} arr = csv.${sf('split')}(${ss("','")});\nconsole.${sf('log')}(arr.${sf('join')}(${sb()}));`,
+        guidance: ["<code>split(',')</code> splits by comma into an array of strings.", "<code>join('-')</code> joins array elements with '-' between them.", "Example: 'a,b,c' → ['a','b','c'] → 'a-b-c'."] },
+    { id: 43, title: "Reverse a String", topic: "strings", difficulty: "medium",
+        desc: "Reverse a string (e.g. 'hello' → 'olleh') using split, reverse, and join.",
+        code: `${sv('let')} s = ${sb()};\n${sv('let')} rev = s.${sf('split')}(${ss('""')}).${sf('reverse')}().${sf('join')}(${ss('""')});\nconsole.${sf('log')}(rev);`,
+        guidance: ["<code>split('')</code> splits into an array of single characters.", "<code>reverse()</code> reverses the array in place.", "<code>join('')</code> concatenates back into a string."] },
+    { id: 44, title: "Starts With / Ends With", topic: "strings", difficulty: "easy",
+        desc: "Check if a string starts with a given prefix and ends with a given suffix; log both booleans.",
+        code: `${sv('let')} str = ${sb()}, prefix = ${sb()}, suffix = ${sb()};\nconsole.${sf('log')}(str.${sf('startsWith')}(prefix), str.${sf('endsWith')}(suffix));`,
+        guidance: ["<code>startsWith(prefix)</code> and <code>endsWith(suffix)</code> return true/false.", "Case-sensitive. Empty string is a valid prefix/suffix."] },
+    { id: 45, title: "Extract Digits from String", topic: "strings", difficulty: "medium",
+        desc: "Given a string like 'a1b2c3', build a new string containing only the digit characters. Use a loop.",
+        code: `${sv('let')} s = ${sb()};\n${sv('let')} digits = ${sb()};\n${sv('for')} (${sv('let')} i = ${sn('0')}; i < s.length; i++) {\n  ${sv('if')} (s[i] >= ${ss('"0"')} ${sv('&&')} s[i] <= ${ss('"9"')}) digits += s[i];\n}\nconsole.${sf('log')}(digits);`,
+        guidance: ["Loop over each character. Check if it's a digit: <code>c >= '0' && c <= '9'</code>.", "Or use <code>/\d/.test(c)</code> or <code>!isNaN(Number(c))</code>.", "Start digits as empty string and concatenate."] },
+    /* Strings Mastery — 5 more without built-in methods (loops + indexing only) */
+    { id: 46, title: "String Length Without .length", topic: "strings", difficulty: "medium",
+        desc: "Find the length of a string using only a loop and bracket indexing. Loop until str[i] is undefined; then i is the length.",
+        code: `${sv('let')} str = ${sb()};\n${sv('let')} i = ${sn('0')};\n${sv('while')} (str[i] !== ${sv('undefined')}) ${sb()};\nconsole.${sf('log')}(i);`,
+        guidance: ["Use a variable <code>i</code> starting at 0; loop while <code>str[i] !== undefined</code>.", "In the loop body, increment <code>i</code>: fill in <code>i++</code>.", "When the loop ends, <code>i</code> is the length (first index past the last character)."] },
+    { id: 47, title: "Last Character Without .slice", topic: "strings", difficulty: "medium",
+        desc: "Get the last character of a string using only a loop (no .length, .slice, or .charAt). Hint: find where str[i] becomes undefined.",
+        code: `${sv('let')} str = ${sb()};\n${sv('let')} i = ${sn('0')};\n${sv('while')} (str[i + ${sn('1')}] !== ${sv('undefined')}) i++;\nconsole.${sf('log')}(str[${sb()}]);`,
+        guidance: ["Loop while <code>str[i + 1] !== undefined</code> and increment <code>i</code>.", "When str[i+1] is undefined, <code>i</code> is the index of the last character.", "Log <code>str[i]</code> (the last character)."] },
+    { id: 48, title: "Count Occurrences of a Character", topic: "strings", difficulty: "medium",
+        desc: "Count how many times a character ch appears in string str. Use only a loop and str[i]; no .indexOf or .split.",
+        code: `${sv('let')} str = ${sb()}, ch = ${sb()};\n${sv('let')} count = ${sn('0')};\n${sv('for')} (${sv('let')} i = ${sn('0')}; str[i] !== ${sv('undefined')}; i++) {\n  ${sv('if')} (str[i] === ch) ${sb()};\n}\nconsole.${sf('log')}(count);`,
+        guidance: ["Loop with <code>i</code> from 0 while <code>str[i] !== undefined</code>.", "If <code>str[i] === ch</code>, increment count.", "No built-in methods — only bracket access and comparison."] },
+    { id: 49, title: "Substring Without .slice", topic: "strings", difficulty: "medium",
+        desc: "Build the substring from index start to end (end exclusive) using only a loop and concatenation. No .slice or .substring.",
+        code: `${sv('let')} str = ${sb()}, start = ${sn('2')}, end = ${sn('5')};\n${sv('let')} result = ${sb()};\n${sv('for')} (${sv('let')} i = start; i < end; i++) result += ${sb()};\nconsole.${sf('log')}(result);`,
+        guidance: ["Start with <code>result = \"\"</code>. Loop <code>i</code> from <code>start</code> to <code>end - 1</code>.", "In the loop: <code>result += str[i]</code>.", "Example: 'hello' from 2 to 5 gives 'ell'."] },
+    { id: 50, title: "Concatenate Two Strings (Character by Character)", topic: "strings", difficulty: "medium",
+        desc: "Build str1 + str2 without using + on the whole strings. Use two loops: add each character of str1 to result, then each of str2.",
+        code: `${sv('let')} str1 = ${sb()}, str2 = ${sb()};\n${sv('let')} result = ${sb()};\n${sv('for')} (${sv('let')} i = ${sn('0')}; str1[i] !== ${sv('undefined')}; i++) result += str1[i];\n${sv('for')} (${sv('let')} j = ${sn('0')}; str2[j] !== ${sv('undefined')}; j++) result += ${sb()};\nconsole.${sf('log')}(result);`,
+        guidance: ["Initialize <code>result = \"\"</code>.", "First loop: while <code>str1[i] !== undefined</code>, do <code>result += str1[i]</code> and i++.", "Second loop: same for str2 — <code>result += str2[j]</code>. No .concat() or + between full strings."] },
+
+    /* Chapter 2 — Pattern (15 problems) */
+    { id: 51, title: "Row of Stars", topic: "pattern", difficulty: "easy",
+        desc: "Use a for loop to print a single row of 5 asterisks (one string with 5 stars).",
+        code: `let row = ${sb()};
+for (let i = 0; i < 5; i++) {
+  row += ${ss('"*"')};
+}
+console.${sf('log')}(row); ${sc('// *****')}`,
+        guidance: ["Start with <code>row = \"\"</code> and concatenate <code>\"*\"</code> in the loop.", "Or use <code>\"*\".repeat(5)</code> for a one-liner.", "Loop 5 times to get 5 stars."] },
+    { id: 52, title: "Rectangle of Stars", topic: "pattern", difficulty: "easy",
+        desc: "Print a 3x5 rectangle: 3 rows, each row has 5 stars. Use nested for loops.",
+        code: `for (let r = 0; r < 3; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < 5; c++) line += ${ss('"*"')};
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Outer loop: rows (3). Inner loop: columns (5).", "Start each line as empty string: <code>let line = \"\"</code>.", "After inner loop, log the line."] },
+    { id: 53, title: "Right Triangle (Stars)", topic: "pattern", difficulty: "easy",
+        desc: "Print a right triangle: row 1 has 1 star, row 2 has 2 stars, ... row 5 has 5 stars.",
+        code: `for (let r = 1; r <= 5; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < r; c++) line += ${ss('"*"')};
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Outer loop <code>r</code> from 1 to 5. Inner loop runs <code>r</code> times.", "So row 1 gets 1 star, row 2 gets 2, etc. Start <code>line = \"\"</code>."] },
+    { id: 54, title: "Inverted Right Triangle", topic: "pattern", difficulty: "easy",
+        desc: "Print 5 stars in row 1, then 4, then 3, 2, 1. Use a loop that decreases.",
+        code: `for (let r = 5; r >= 1; r--) {
+  let line = ${sb()};
+  for (let c = 0; c < r; c++) line += ${ss('"*"')};
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Outer loop: <code>r</code> from 5 down to 1. Inner loop: add <code>r</code> stars.", "Each row has one fewer star than the previous."] },
+    { id: 55, title: "Number Row 1 to N", topic: "pattern", difficulty: "easy",
+        desc: "Print numbers 1, 2, 3, 4, 5 on one line (space-separated). Use a loop and string concatenation.",
+        code: `let out = ${sb()};
+for (let i = 1; i <= 5; i++) {
+  out += i + ${ss('" "')};
+}
+console.${sf('log')}(out.trim()); ${sc('// 1 2 3 4 5')}`,
+        guidance: ["Start <code>out = \"\"</code>. In loop: <code>out += i + \" \"</code>.", "Use <code>.trim()</code> to remove trailing space, or avoid adding space after last number."] },
+    { id: 56, title: "Pyramid of Stars (Centered)", topic: "pattern", difficulty: "medium",
+        desc: "Print a pyramid: 1 star, then 3, then 5, then 7. Add spaces before each row to center.",
+        code: `const n = 4;
+for (let r = 0; r < n; r++) {
+  let spaces = ${ss('" "')}.repeat(n - 1 - r);
+  let stars = ${ss('"*"')}.repeat(2 * r + 1);
+  console.${sf('log')}(spaces + stars);
+}`,
+        guidance: ["Row <code>r</code> (0-based): spaces = <code>n - 1 - r</code>, stars = <code>2*r + 1</code>.", "Use <code>\" \".repeat(k)</code> and <code>\"*\".repeat(k)</code>."] },
+    { id: 57, title: "Square of Numbers", topic: "pattern", difficulty: "easy",
+        desc: "Print a 3x3 grid: each row is 1 2 3, then 4 5 6, then 7 8 9. Use nested loops and a counter.",
+        code: `let num = 1;
+for (let r = 0; r < 3; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < 3; c++) {
+    line += num + ${ss('" "')};
+    num++;
+  }
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Use a variable <code>num</code> starting at 1; increment after each print.", "Inner loop builds one row; outer loop runs 3 times. Start <code>line = \"\"</code>."] },
+    { id: 58, title: "Floyd's Triangle", topic: "pattern", difficulty: "medium",
+        desc: "Print: row1 = 1, row2 = 2 3, row3 = 4 5 6, row4 = 7 8 9 10. Use a counter and nested loops.",
+        code: `let count = 1;
+for (let r = 1; r <= 4; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < r; c++) {
+    line += count + ${ss('" "')};
+    count++;
+  }
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Row <code>r</code> has <code>r</code> numbers. Inner loop runs <code>r</code> times.", "Increment <code>count</code> after each number. Start <code>line = \"\"</code>."] },
+    { id: 59, title: "Same Number per Row", topic: "pattern", difficulty: "easy",
+        desc: "Print 4 rows: row 1 has all 1s, row 2 has all 2s, row 3 all 3s, row 4 all 4s. Five digits per row.",
+        code: `for (let r = 1; r <= 4; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < 5; c++) line += r;
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Outer loop: row number <code>r</code>. Inner loop: append <code>r</code> five times.", "Start <code>line = \"\"</code> for each row."] },
+    { id: 60, title: "Alternating 0 and 1", topic: "pattern", difficulty: "easy",
+        desc: "Print a 4x4 grid where (r+c) % 2 gives 0 or 1 — checkerboard style.",
+        code: `for (let r = 0; r < 4; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < 4; c++) {
+    line += (r + c) % 2;
+  }
+  console.${sf('log')}(line);
+}`,
+        guidance: ["<code>(r + c) % 2</code> is 0 when r+c is even, 1 when odd.", "Start <code>line = \"\"</code>; add the digit in inner loop."] },
+    { id: 61, title: "Left-Aligned Number Triangle", topic: "pattern", difficulty: "easy",
+        desc: "Print: 1, then 12, then 123, then 1234. Row r contains numbers 1 to r.",
+        code: `for (let r = 1; r <= 4; r++) {
+  let line = ${sb()};
+  for (let c = 1; c <= r; c++) line += c;
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Outer: row 1 to 4. Inner: from 1 to <code>r</code>, append <code>c</code>.", "Start <code>line = \"\"</code>."] },
+    { id: 62, title: "Hollow Rectangle", topic: "pattern", difficulty: "medium",
+        desc: "Print a 4x5 rectangle of stars where only the border is stars; inside is empty (spaces).",
+        code: `const rows = 4, cols = 5;
+for (let r = 0; r < rows; r++) {
+  let line = ${sb()};
+  for (let c = 0; c < cols; c++) {
+    if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1)
+      line += ${ss('"*"')};
+    else line += ${ss('" "')};
+  }
+  console.${sf('log')}(line);
+}`,
+        guidance: ["First/last row or first/last column → star; otherwise space.", "Use <code>r === 0 || r === rows - 1 || c === 0 || c === cols - 1</code>. Start <code>line = \"\"</code>."] },
+    { id: 63, title: "Odd Number Pyramid", topic: "pattern", difficulty: "medium",
+        desc: "Print row 1: 1, row 2: 1 3, row 3: 1 3 5, row 4: 1 3 5 7. Use a loop for odd numbers.",
+        code: `for (let r = 1; r <= 4; r++) {
+  let line = ${sb()};
+  for (let k = 0; k < r; k++) {
+    line += (2 * k + 1) + ${ss('" "')};
+  }
+  console.${sf('log')}(line);
+}`,
+        guidance: ["Row r has r odd numbers: 1, 3, 5, ... = <code>2*k + 1</code> for k = 0, 1, ..., r-1.", "Start <code>line = \"\"</code>."] },
+    { id: 64, title: "Reverse Number Row", topic: "pattern", difficulty: "easy",
+        desc: "Print one line: 5 4 3 2 1. Use a for loop that counts down.",
+        code: `let out = ${sb()};
+for (let i = 5; i >= 1; i--) {
+  out += i + ${ss('" "')};
+}
+console.${sf('log')}(out.trim());`,
+        guidance: ["Loop from 5 down to 1: <code>for (let i = 5; i >= 1; i--)</code>.", "Start <code>out = \"\"</code>; append <code>i + \" \"</code>."] },
+    { id: 65, title: "Character Repeat Pattern", topic: "pattern", difficulty: "easy",
+        desc: "Print 4 lines: line 1 has one 'A', line 2 has 'BB', line 3 'CCC', line 4 'DDDD'. Use String.repeat and a loop.",
+        code: `const chars = ${ss('"ABCD"')};
+for (let i = 0; i < 4; i++) {
+  console.${sf('log')}(${sb()});
+} ${sc('// A, BB, CCC, DDDD')}`,
+        guidance: ["<code>chars[i]</code> is the character. Repeat it <code>i + 1</code> times.", "Fill: <code>chars[i].repeat(i + 1)</code> to get A, BB, CCC, DDDD."] }
 ];
 
 /* ─────────────────────────────────────────────
@@ -3301,6 +3546,7 @@ restoreSolvedUI();
 ───────────────────────────────────────────── */
 function updateChapter2Lock() {
     const ch2Tab = document.querySelector('.ch-tab[data-chapter="2"]');
+    const opt2 = document.querySelector('#chapter-select-mobile option[value="2"]');
     if (!ch2Tab) return;
     const ch1Complete = ch1.filter(function (p) { return solvedIds.ch1.has(p.id); }).length >= ch1.length;
     if (ch1Complete) {
@@ -3308,16 +3554,19 @@ function updateChapter2Lock() {
         ch2Tab.classList.add('ch-tab-unlocked');
         ch2Tab.setAttribute('aria-disabled', 'false');
         ch2Tab.title = 'Control Statements';
+        if (opt2) { opt2.disabled = false; opt2.textContent = 'Ch.2 Control Statements'; }
     } else {
         ch2Tab.classList.add('ch-tab-locked');
         ch2Tab.classList.remove('ch-tab-unlocked');
         ch2Tab.setAttribute('aria-disabled', 'true');
         ch2Tab.title = 'Complete all ' + ch1.length + ' Chapter 1 problems to unlock';
+        if (opt2) { opt2.disabled = true; opt2.textContent = 'Ch.2 Control (unlock after Ch.1)'; }
     }
 }
 
 function updateChapter3Lock() {
     const ch3Tab = document.querySelector('.ch-tab[data-chapter="3"]');
+    const opt3 = document.querySelector('#chapter-select-mobile option[value="3"]');
     if (!ch3Tab) return;
     const ch2Complete = ch2.filter(function (p) { return solvedIds.ch2.has(p.id); }).length >= ch2.length;
     if (ch2Complete) {
@@ -3325,25 +3574,64 @@ function updateChapter3Lock() {
         ch3Tab.classList.add('ch-tab-unlocked');
         ch3Tab.setAttribute('aria-disabled', 'false');
         ch3Tab.title = 'JS Functions';
+        if (opt3) { opt3.disabled = false; opt3.textContent = 'Ch.3 JS Functions'; }
     } else {
         ch3Tab.classList.add('ch-tab-locked');
         ch3Tab.classList.remove('ch-tab-unlocked');
         ch3Tab.setAttribute('aria-disabled', 'true');
         ch3Tab.title = 'Complete all ' + ch2.length + ' Chapter 2 problems to unlock';
+        if (opt3) { opt3.disabled = true; opt3.textContent = 'Ch.3 Functions (unlock after Ch.2)'; }
     }
+}
+
+function switchToChapter(ch) {
+    const btn = document.querySelector('.ch-tab[data-chapter="' + ch + '"]');
+    if (btn && ((ch === '2' && btn.classList.contains('ch-tab-locked')) || (ch === '3' && btn.classList.contains('ch-tab-locked')))) return;
+    document.querySelectorAll('.ch-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.ch-section').forEach(s => s.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const section = document.getElementById('chapter-' + ch);
+    if (section) section.classList.add('active');
+    const mobileSelect = document.getElementById('chapter-select-mobile');
+    if (mobileSelect) mobileSelect.value = ch;
+    syncHeaderProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+var chapterTitles = { '1': 'JS Fundamentals', '2': 'Control Statements', '3': 'JS Functions' };
+
+function syncHeaderProgress() {
+    const activeSection = document.querySelector('.ch-section.active');
+    const ch = activeSection ? activeSection.id.replace('chapter-', '') : '1';
+    const labelEl = document.getElementById('bottom-prog-label');
+    const textEl = document.getElementById('bottom-prog-text');
+    const fillEl = document.getElementById('bottom-prog-fill');
+    const srcText = document.getElementById('ch' + ch + '-prog-text');
+    const srcFill = document.getElementById('ch' + ch + '-prog-fill');
+    if (labelEl) labelEl.textContent = 'Chapter ' + ch + ' – ' + (chapterTitles[ch] || '');
+    if (textEl && srcText) textEl.textContent = srcText.textContent;
+    if (fillEl && srcFill) fillEl.style.width = srcFill.style.width || '0%';
 }
 
 document.querySelectorAll('.ch-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         const ch = btn.dataset.chapter;
-        if ((ch === '2' && btn.classList.contains('ch-tab-locked')) || (ch === '3' && btn.classList.contains('ch-tab-locked'))) return;
-        document.querySelectorAll('.ch-tab').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.ch-section').forEach(s => s.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('chapter-' + ch).classList.add('active');
-        window.scrollTo({top: 0, behavior: 'smooth'});
+        switchToChapter(ch);
     });
 });
+
+const mobileChapterSelect = document.getElementById('chapter-select-mobile');
+if (mobileChapterSelect) {
+    mobileChapterSelect.addEventListener('change', function () {
+        const ch = this.value;
+        if (ch === '2' || ch === '3') {
+            const tab = document.querySelector('.ch-tab[data-chapter="' + ch + '"]');
+            if (tab && tab.classList.contains('ch-tab-locked')) return;
+        }
+        switchToChapter(ch);
+    });
+}
+
 updateChapter2Lock();
 updateChapter3Lock();
 
@@ -3442,7 +3730,12 @@ function updateProgress() {
     document.getElementById('ch2-prog-fill').style.width = `${Math.min(1, d2 / t2) * 100}%`;
     document.getElementById('ch3-prog-text').textContent = `${d3} / ${t3} solved`;
     document.getElementById('ch3-prog-fill').style.width = `${Math.min(1, d3 / t3) * 100}%`;
-    document.getElementById('total-count').textContent = d1 + d2 + d3;
+    const total = d1 + d2 + d3;
+    const totalEl = document.getElementById('total-count');
+    if (totalEl) totalEl.textContent = total;
+    const totalMobile = document.getElementById('total-count-mobile');
+    if (totalMobile) totalMobile.textContent = total;
+    syncHeaderProgress();
     updateChapter2Lock();
     updateChapter3Lock();
 }

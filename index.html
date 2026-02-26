@@ -34,8 +34,18 @@
   </script>
   <style>
     /* Ensure same look as original regardless of Tailwind custom colors */
-    body { background: #0a0a12; color: #e8e8f0; font-family: 'Outfit', sans-serif; }
-    .site-header { position: sticky; top: 0; z-index: 100; background: #0a0a12; border-bottom: 1px solid #2a2a45; }
+    body { background: #0a0a12; color: #e8e8f0; font-family: 'Outfit', sans-serif; overflow-x: clip; position: relative; }
+    .site-header { display: flex; align-items: center; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; width: 100% !important; z-index: 9999; background: #0a0a12; border: none; box-shadow: 0 2px 12px rgba(0,0,0,0.35); isolation: isolate; }
+    .header-row-1 { display: flex; align-items: center; min-height: 4rem; }
+    .header-progress-bar { display: none; border-top: none; }
+    .header-chapter-progress { display: none; }
+    body { padding-top: 4rem; }
+    .progress-bar-footer { display: none !important; }
+    .progress-section { position: sticky; top: 4rem; z-index: 90; background: #0a0a12; padding: 12px 20px 16px; margin: 0 auto 1.5rem; border-bottom: 1px solid #2a2a45; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .progress-section .progress-label { margin-bottom: 8px; }
+    @media (min-width: 641px) {
+      .site-header { flex-direction: row; }
+    }
     .subtitle { color: #6b6b88; }
     .hero h1 .hl { color: #5b5bf5; }
     body::before {
@@ -64,6 +74,9 @@
     .ch2-fb [data-topic="switch"].active { background: #f5a623; border-color: #f5a623; color: #0a0a12; }
     .ch2-fb [data-topic="loops"].active { background: #2dd4bf; border-color: #2dd4bf; color: #0a0a12; }
     .ch2-fb [data-topic="control"].active { background: #22d3a5; border-color: #22d3a5; color: #0a0a12; }
+    .ch2-fb [data-topic="number"].active { background: #818cf8; border-color: #818cf8; color: #fff; }
+    .ch2-fb [data-topic="strings"].active { background: #34d399; border-color: #34d399; color: #0a0a12; }
+    .ch2-fb [data-topic="pattern"].active { background: #c084fc; border-color: #c084fc; color: #fff; }
     .ch3-fb [data-topic="definition"].active { background: #5b5bf5; border-color: #5b5bf5; color: #fff; }
     .ch3-fb [data-topic="execution"].active { background: #f5a623; border-color: #f5a623; color: #0a0a12; }
     .ch3-fb [data-topic="scope"].active { background: #2dd4bf; border-color: #2dd4bf; color: #0a0a12; }
@@ -92,6 +105,9 @@
     .tag-switch { background: rgba(245,166,35,0.15); color: #f5c623; border-color: rgba(245,166,35,0.3); }
     .tag-loops { background: rgba(45,212,191,0.15); color: #2dd4bf; border-color: rgba(45,212,191,0.3); }
     .tag-control { background: rgba(34,211,165,0.15); color: #22d3a5; border-color: rgba(34,211,165,0.3); }
+    .tag-number { background: rgba(129,140,248,0.2); color: #818cf8; border-color: rgba(129,140,248,0.35); }
+    .tag-strings { background: rgba(52,211,153,0.2); color: #34d399; border-color: rgba(52,211,153,0.35); }
+    .tag-pattern { background: rgba(192,132,252,0.15); color: #c084fc; border-color: rgba(192,132,252,0.3); }
     .tag-definition { background: rgba(91,91,245,0.18); color: #8b8bf8; border-color: rgba(91,91,245,0.3); }
     .tag-execution { background: rgba(245,166,35,0.15); color: #f5a623; border-color: rgba(245,166,35,0.3); }
     .tag-context { background: rgba(192,132,252,0.15); color: #c084fc; border-color: rgba(192,132,252,0.3); }
@@ -141,7 +157,7 @@
     .ch-tab.ch-tab-unlocked .ch-lock-icon { display: none; }
     .chapter-nav { -ms-overflow-style: none; scrollbar-width: none; }
     .chapter-nav::-webkit-scrollbar { display: none; }
-    .progress-section { position: sticky; top: 4rem; z-index: 90; background: #0a0a`12; padding-top: 12px; padding-bottom: 16px; margin-top: -12px; border-bottom: 1px solid #2a2a45; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .chapter-nav-mobile { display: none; }
     .write-code-btn { width: 100%; margin-bottom: 12px; padding: 10px 16px; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; background: rgba(91,91,245,0.15); color: #8b8bf8; border: 1px solid rgba(91,91,245,0.4); transition: all 0.2s; }
     .write-code-btn:hover { background: rgba(91,91,245,0.25); border-color: #5b5bf5; }
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; overflow-y: auto; }
@@ -166,36 +182,76 @@
     .modal-output.error { border-color: rgba(245,91,91,0.4); color: #f58b8b; }
     .modal-output.success { border-color: rgba(34,211,165,0.4); color: #22d3a5; }
     .modal-actions { display: flex; gap: 10px; }
-    @media (max-width: 640px) {
-      .site-header { padding-left: 14px; padding-right: 14px; }
-      .hdr-div { margin-left: 10px; margin-right: 10px; }
-      .ch-label { display: none; }
-      .problems-grid { grid-template-columns: 1fr; padding-left: 12px; padding-right: 12px; padding-bottom: 60px; }
+    /* Mobile: ensure header has fixed height so sticky progress works */
+    @media (max-width: 768px) {
+      .site-header { min-height: 4rem; flex-wrap: nowrap; padding-left: 12px; padding-right: 12px; align-items: center; }
+      .progress-section { top: 4rem; position: sticky; z-index: 90; background: #0a0a12; padding-left: 14px; padding-right: 14px; }
+      .chapter-nav { flex: 1 1 auto; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+      .chapter-nav .ch-tab { flex-shrink: 0; font-size: 0.75rem; padding: 0.5rem 0.6rem; }
+      .ch-tab .ch-num { font-size: 0.62rem; }
+      .hero { padding-left: 14px; padding-right: 14px; }
+      .filter-bar { padding-left: 14px; padding-right: 14px; gap: 6px; }
+      .filter-btn { font-size: 0.75rem; padding: 6px 10px; }
+      .problems-grid { grid-template-columns: 1fr !important; minmax(0, 1fr); padding-left: 14px; padding-right: 14px; padding-bottom: 60px; gap: 1rem; }
+      .card-header { padding: 12px 14px; flex-wrap: wrap; gap: 8px; }
+      .problem-title { font-size: 0.88rem; }
+      .card-body { padding: 14px; }
+      .code-block { font-size: 0.72rem; padding: 10px 12px; overflow-x: auto; }
+      .hdr-solved { font-size: 0.65rem; padding: 6px 10px; }
     }
-  </style>
+    @media (max-width: 640px) {
+      .site-header { padding-left: 10px; padding-right: 10px; }
+      .header-row-1 { padding-left: 10px; padding-right: 10px; }
+      .hdr-div { margin-left: 6px; margin-right: 6px; }
+      .ch-label { display: none; }
+      .chapter-nav-desktop { display: flex !important; }
+      .chapter-nav-mobile { display: none !important; }
+      .ch-tab .ch-tab-text { display: none; }
+      .ch-tab .ch-lock-icon { display: none; }
+      .ch-tab { padding: 0.5rem 0.75rem; min-width: 44px; justify-content: center; }
+      .ch-tab .ch-num { margin: 0; }
+      body { padding-top: 6rem; }
+      .header-progress-bar { display: block !important; background: #12121e; padding: 8px 12px; border-top: none; }
+      .header-progress-bar .hdr-solved { margin: 0; width: 100%; text-align: center; border: none; background: transparent; }
+      .hdr-solved-in-row { display: none !important; }
+      .progress-section { padding: 10px 14px 12px; }
+      .progress-section .progress-label { font-size: 0.72rem; }
+      .problems-grid { padding-left: 12px; padding-right: 12px; }
+    }
+  </style> 
 </head>
-<body class="min-h-screen overflow-x-hidden bg-bg text-text font-outfit relative">
+<body class="min-h-screen bg-bg text-text font-outfit relative">
 
-  <!-- Sticky Header -->
-  <header class="site-header sticky top-0 z-[100] h-16 flex items-center px-6 border-b border-border bg-bg/92 backdrop-blur-xl" style="border-color: var(--tw-border);">
-    <a href="#" class="header-logo flex items-center gap-2.5 shrink-0 no-underline">
-      <div class="logo-icon w-9 h-9 rounded-lg bg-accent flex items-center justify-center text-sm font-extrabold text-white font-mono shrink-0">JS</div>
-      <span class="logo-text font-extrabold text-[0.93rem] tracking-tight text-text">Workout <span class="text-accent">Problems</span></span>
-    </a>
-    <div class="hdr-div w-px h-7 bg-border mx-5 shrink-0"></div>
-    <nav class="chapter-nav flex items-center gap-1.5 flex-1 overflow-x-auto scrollbar-none">
-      <span class="ch-label text-[0.68rem] font-bold text-muted uppercase tracking-widest whitespace-nowrap mr-1 shrink-0">Chapters:</span>
-      <button type="button" class="ch-tab active flex items-center gap-1.5 border border-border rounded-[10px] font-outfit text-[0.82rem] font-semibold py-1.5 px-3.5 cursor-pointer transition-all whitespace-nowrap shrink-0 hover:border-accent hover:text-text" data-chapter="1">
-        <span class="ch-num font-mono text-[0.66rem] bg-white/15 py-0.5 px-1.5 rounded-md">01</span> JS Fundamentals
-      </button>
-      <button type="button" class="ch-tab ch-tab-locked flex items-center gap-1.5 bg-transparent border border-border rounded-[10px] text-muted font-outfit text-[0.82rem] font-semibold py-1.5 px-3.5 transition-all whitespace-nowrap shrink-0 hover:border-accent hover:text-text" data-chapter="2" title="Complete all Chapter 1 problems to unlock" aria-disabled="true">
-        <span class="ch-num font-mono text-[0.66rem] bg-white/15 py-0.5 px-1.5 rounded-md">02</span> Control Statements <span class="ch-lock-icon" aria-hidden="true">🔒</span>
-      </button>
-      <button type="button" class="ch-tab ch-tab-locked flex items-center gap-1.5 bg-transparent border border-border rounded-[10px] text-muted font-outfit text-[0.82rem] font-semibold py-1.5 px-3.5 transition-all whitespace-nowrap shrink-0 hover:border-accent hover:text-text" data-chapter="3" title="Complete all Chapter 2 problems to unlock" aria-disabled="true">
-        <span class="ch-num font-mono text-[0.66rem] bg-white/15 py-0.5 px-1.5 rounded-md">03</span> JS Functions <span class="ch-lock-icon" aria-hidden="true">🔒</span>
-      </button>
-    </nav>
-    <div class="hdr-solved ml-auto shrink-0 font-mono text-[0.7rem] text-muted bg-surface border border-border rounded-lg py-1.5 px-3 whitespace-nowrap">Total solved: <span id="total-count" class="text-accent font-bold">0</span></div>
+  <!-- Sticky Header: row 1 = logo + chapters, row 2 (mobile) = Total solved bar -->
+  <header class="site-header h-auto flex items-stretch px-6 bg-bg w-full" id="main-header">
+    <div class="header-row-1 flex items-center flex-1 w-full min-w-0">
+      <a href="#" class="header-logo flex items-center gap-2.5 shrink-0 no-underline">
+        <div class="logo-icon w-9 h-9 rounded-lg bg-accent flex items-center justify-center text-sm font-extrabold text-white font-mono shrink-0">JS</div>
+        <span class="logo-text font-extrabold text-[0.93rem] tracking-tight text-text">Workout <span class="text-accent">Problems</span></span>
+      </a>
+      <div class="hdr-div w-px h-7 bg-border mx-5 shrink-0"></div>
+      <nav class="chapter-nav chapter-nav-desktop flex items-center gap-1.5 flex-1 overflow-x-auto scrollbar-none min-w-0">
+        <span class="ch-label text-[0.68rem] font-bold text-muted uppercase tracking-widest whitespace-nowrap mr-1 shrink-0">Chapters:</span>
+        <button type="button" class="ch-tab active flex items-center gap-1.5 border border-border rounded-[10px] font-outfit text-[0.82rem] font-semibold py-1.5 px-3.5 cursor-pointer transition-all whitespace-nowrap shrink-0 hover:border-accent hover:text-text" data-chapter="1">
+          <span class="ch-num font-mono text-[0.66rem] bg-white/15 py-0.5 px-1.5 rounded-md">01</span><span class="ch-tab-text"> JS Fundamentals</span>
+        </button>
+        <button type="button" class="ch-tab ch-tab-locked flex items-center gap-1.5 bg-transparent border border-border rounded-[10px] text-muted font-outfit text-[0.82rem] font-semibold py-1.5 px-3.5 transition-all whitespace-nowrap shrink-0 hover:border-accent hover:text-text" data-chapter="2" title="Complete all Chapter 1 problems to unlock" aria-disabled="true">
+          <span class="ch-num font-mono text-[0.66rem] bg-white/15 py-0.5 px-1.5 rounded-md">02</span><span class="ch-tab-text"> Control Statements </span><span class="ch-lock-icon" aria-hidden="true">🔒</span>
+        </button>
+        <button type="button" class="ch-tab ch-tab-locked flex items-center gap-1.5 bg-transparent border border-border rounded-[10px] text-muted font-outfit text-[0.82rem] font-semibold py-1.5 px-3.5 transition-all whitespace-nowrap shrink-0 hover:border-accent hover:text-text" data-chapter="3" title="Complete all Chapter 2 problems to unlock" aria-disabled="true">
+          <span class="ch-num font-mono text-[0.66rem] bg-white/15 py-0.5 px-1.5 rounded-md">03</span><span class="ch-tab-text"> JS Functions </span><span class="ch-lock-icon" aria-hidden="true">🔒</span>
+        </button>
+      </nav>
+      <select id="chapter-select-mobile" class="chapter-nav-mobile border border-border rounded-lg bg-surface text-text font-outfit text-[0.8rem] font-semibold py-2 px-3 cursor-pointer" aria-label="Select chapter">
+        <option value="1">Ch.1 JS Fundamentals</option>
+        <option value="2" disabled>Ch.2 Control (unlock after Ch.1)</option>
+        <option value="3" disabled>Ch.3 Functions (unlock after Ch.2)</option>
+      </select>
+      <div class="hdr-solved hdr-solved-in-row ml-auto shrink-0 font-mono text-[0.7rem] text-muted bg-surface border border-border rounded-lg py-1.5 px-3 whitespace-nowrap">Total solved: <span id="total-count" class="text-accent font-bold">0</span></div>
+    </div>
+    <div class="header-progress-bar" aria-hidden="true">
+      <div class="hdr-solved font-mono text-[0.75rem] text-muted">Total solved: <span id="total-count-mobile" class="text-accent font-bold">0</span></div>
+    </div>
   </header>
 
   <!-- Chapter 1 -->
@@ -215,7 +271,7 @@
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="types">Data Types</button>
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="functions">Built-in Functions</button>
     </div>
-    <div class="progress-section max-w-[900px] mx-auto mb-8 px-5">
+    <div class="progress-section max-w-[900px] mx-auto px-5">
       <div class="progress-label flex justify-between text-[0.78rem] text-muted mb-2 font-mono"><span>Chapter 1 Progress</span><span id="ch1-prog-text">0 / 50 solved</span></div>
       <div class="progress-bar-bg bg-surface border border-border rounded-[10px] h-2 overflow-hidden">
         <div class="progress-bar-fill h-full rounded-[10px] transition-[width] duration-500 ease-out bg-gradient-to-r from-accent to-accent3" id="ch1-prog-fill" style="width:0%"></div>
@@ -230,17 +286,20 @@
       <img src="images/edure-logo-2.png" alt="Edure - AN ISO 9001:2015 CERTIFIED" class="mx-auto mb-6 max-h-24 w-auto object-contain" />
       <div class="badge inline-flex items-center gap-1.5 font-mono text-[0.68rem] py-1.5 px-3.5 rounded-full tracking-widest uppercase mb-4" style="background: rgba(91,91,245,0.12); border: 1px solid rgba(91,91,245,0.35); color: #5b5bf5;">📖 Chapter 02</div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-2.5" style="color: #e8e8f0;">Control <span class="hl" style="color: #5b5bf5;">Statements</span></h1>
-      <p class="subtitle text-base font-light max-w-[520px] mx-auto" style="color: #6b6b88;">25 problems on if/else, ternary, switch, for, while, do-while, break &amp; continue.</p>
+      <p class="subtitle text-base font-light max-w-[520px] mx-auto" style="color: #6b6b88;">65 problems on if/else, ternary, switch, loops, number &amp; math, strings mastery, break &amp; continue, and pattern printing.</p>
     </div>
     <div class="filter-bar ch2-fb flex gap-2 justify-center flex-wrap py-6 px-5 pb-8 relative z-10" id="ch2-filter-bar">
-      <button type="button" class="filter-btn active bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="all">All (25)</button>
+      <button type="button" class="filter-btn active bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="all">All (65)</button>
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="if">if / else &amp; ternary</button>
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="switch">switch</button>
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="loops">Loops (14)</button>
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="control">break &amp; continue</button>
+      <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="number">Number &amp; Math (10)</button>
+      <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="strings">Strings Mastery (15)</button>
+      <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="pattern">Pattern (15)</button>
     </div>
-    <div class="progress-section max-w-[900px] mx-auto mb-8 px-5">
-      <div class="progress-label flex justify-between text-[0.78rem] text-muted mb-2 font-mono"><span>Chapter 2 Progress</span><span id="ch2-prog-text">0 / 25 solved</span></div>
+    <div class="progress-section max-w-[900px] mx-auto px-5">
+      <div class="progress-label flex justify-between text-[0.78rem] text-muted mb-2 font-mono"><span>Chapter 2 Progress</span><span id="ch2-prog-text">0 / 65 solved</span></div>
       <div class="progress-bar-bg rounded-[10px] h-2 overflow-hidden" style="background: #12121e; border: 1px solid #2a2a45;">
         <div class="progress-bar-fill h-full rounded-[10px] transition-[width] duration-500 ease-out" id="ch2-prog-fill" style="width:0%; background: linear-gradient(90deg, #5b5bf5, #2dd4bf);"></div>
       </div>
@@ -265,7 +324,7 @@
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="closures">JavaScript Closures</button>
       <button type="button" class="filter-btn bg-surface border border-border text-muted py-1.5 px-4 rounded-lg font-outfit text-[0.82rem] font-semibold cursor-pointer transition-all hover:bg-accent hover:border-accent hover:text-white" data-topic="shortCircuit">Short Circuiting</button>
     </div>
-    <div class="progress-section max-w-[900px] mx-auto mb-8 px-5">
+    <div class="progress-section max-w-[900px] mx-auto px-5">
       <div class="progress-label flex justify-between text-[0.78rem] text-muted mb-2 font-mono"><span>Chapter 3 Progress</span><span id="ch3-prog-text">0 / 50 solved</span></div>
       <div class="progress-bar-bg rounded-[10px] h-2 overflow-hidden" style="background: #12121e; border: 1px solid #2a2a45;">
         <div class="progress-bar-fill h-full rounded-[10px] transition-[width] duration-500 ease-out" id="ch3-prog-fill" style="width:0%; background: linear-gradient(90deg, #5b5bf5, #2dd4bf);"></div>
